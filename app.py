@@ -41,7 +41,7 @@ def get_bin_info():
         ret = {"data":[]}
         for the_bin in bins:
             keys = ["id","ip_address","bin_height","location","bin_type","waste_metrics"]
-            vals = [str(the_bin.id),the_bin.ip_address,str(the_bin.bin_height),the_bin.location,the_bin.bin_type,the_bin.waste_metrics]
+            vals = [the_bin.id,the_bin.ip_address,the_bin.bin_height,the_bin.location,the_bin.bin_type,the_bin.waste_metrics]
             ret["data"].append(dict(zip(keys,vals)))
     return jsonify(ret),200
 
@@ -73,7 +73,7 @@ def get_fullness():
         ret = {"data":[]}
         for the_f in fullness_data:
             keys = ["id","datetimestamp","fullness","bin_id"]
-            vals = [str(the_f.id),str(the_f.datetimestamp),str(the_f.fullness),str(the_f.bin_id)]
+            vals = [the_f.id,str(the_f.datetimestamp),the_f.fullness,the_f.bin_id]
             ret["data"].append(dict(zip(keys,vals)))
     return jsonify(ret),200
 
