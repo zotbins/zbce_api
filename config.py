@@ -3,7 +3,8 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
 
-UPLOAD_FOLDER = ''
+# for your upload folder make sure you change the permissions so anyone can modify it using `chmod 777`
+UPLOAD_FOLDER = '.' #change this to your specified upload folder
 ALLOWED_EXTENSIONS = set(['txt','pdf','png','jpg','jpeg','gif'])
 
 app = Flask(__name__)

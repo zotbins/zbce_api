@@ -77,12 +77,15 @@ def get_fullness():
             ret["data"].append(dict(zip(keys,vals)))
     return jsonify(ret),200
 
+
 @app.route('/post/image',methods=['POST','GET'])
 def post_image():
     """
     Post Request Example:
     """
     if request.method == 'POST':
+        print(request)
+        print(request.files)
         if 'file' not in request.files:
             flash('no file part in request')
             return redirect(request.url)
@@ -97,9 +100,16 @@ def post_image():
             return "Image already exists", 400
 
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
+            # extract the extension of the file
+            ext = file.filename.split('.')[-1]
+
+            # gather the datetime stamp for the filename
+            curr_datetime = datetime.datetime.utcnow()
+            filename = secure_filename(curr_datetime.strftime("%Y-%m-%d_%H-%M-%S-%f") + "." +  ext)
+
+            # save the file to the upload folder
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return redirect(url_for('uploaded_file',filename=filename))
+            return "Success", 200 #redirect(url_for('uploaded_file',filename=filename))
 
     return '''
         <!doctype html>
