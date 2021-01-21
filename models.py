@@ -21,8 +21,8 @@ class BinInfo(db.Model):
     waste_metrics = db.Column(db.String(64))
 
     fullnesses = db.relationship('BinFullness', backref='bin',lazy='dynamic')
-    #weights = db.relationship('BinWeight', backref='bin',lazy='dynamic')
-    #usages = db.relationship('BinUsage', backref='bin',lazy='dynamic')
+    weights = db.relationship('BinWeight', backref='bin',lazy='dynamic')
+    usages = db.relationship('BinUsage', backref='bin',lazy='dynamic')
 
     def __repr__(self):
         return '<BinInfo {}>'.format(self.id)

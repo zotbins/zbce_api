@@ -8,6 +8,7 @@ import os
 # local imports
 from config import db, app, UPLOAD_FOLDER, ALLOWED_EXTENSIONS
 import models
+import zbce_queries
 
 @app.route('/')
 def main_page():
@@ -83,9 +84,10 @@ def post_image():
     """
     Post Request Example:
     """
+    ip_addr = request.remote_addr
     if request.method == 'POST':
-        print(request)
-        print(request.files)
+        if zbce_queries.ip_bin_id(ip_addr) == None:
+            return "Invalid Ip Address", 400
         if 'file' not in request.files:
             flash('no file part in request')
             return redirect(request.url)
@@ -105,7 +107,7 @@ def post_image():
 
             # gather the datetime stamp for the filename
             curr_datetime = datetime.datetime.utcnow()
-            filename = secure_filename(curr_datetime.strftime("%Y-%m-%d_%H-%M-%S-%f") + "." +  ext)
+            filename = secure_filename(curr_datetime.strftime("%Y-%m-%d_%H-%M-%S-%f") + "_" + ip_addr.replace(".","-") +  "." +  ext)
 
             # save the file to the upload folder
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
