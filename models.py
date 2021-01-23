@@ -45,7 +45,5 @@ class BinWeight(db.Model):
 class BinUsage(db.Model):
     __tablename__ = 'binusage'
     id = db.Column(db.Integer, primary_key=True)
-    start_datetime = db.Column(db.DateTime)
-    end_datetime = db.Column(db.DateTime)
-    times_used= db.Column(db.Integer)
+    datetime = db.Column(db.DateTime)
     bin_id = db.Column(db.Integer,db.ForeignKey('bins.id'))
