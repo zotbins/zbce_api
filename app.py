@@ -4,6 +4,7 @@ import datetime
 from flask import Flask, render_template, session, redirect, url_for, flash, jsonify, make_response, request, abort, flash, send_from_directory
 from werkzeug.utils import secure_filename
 import os
+from sqlalchemy import between, and_
 
 # local imports
 from config import db, app, UPLOAD_FOLDER, ALLOWED_EXTENSIONS
@@ -107,6 +108,36 @@ def post_weight():
     except Exception as e:
         return str(e), 400
 
+@app.route('/weight', methods=['GET'])
+def get_weight():
+    """
+    Example Parameters:
+    bin_id = 1
+    start_timestamp = 2015-11-04 15:06:25
+    end_timestamp = 2015-11-05 15:06:25
+    """
+    try:
+        # Get query parameters
+        bin_id = request.args.get("bin_id")
+        start_timestamp = request.args.get("start_timestamp")
+        end_timestamp = request.args.get("end_timestamp")
+
+        # None of the parameters can be null
+        if bin_id is None or start_timestamp is None or end_timestamp is None:
+            return "Invalid parameters", 400
+        else:
+            # Get entries with same bin_id and between start_timestamp and end_timestamp
+            weight_data = models.BinWeight.query.filter(and_(models.BinWeight.bin_id == bin_id, between(models.BinWeight.datetimestamp, start_timestamp, end_timestamp))).all()
+            ret = {"data":[]}
+            for row in weight_data:
+                print(row.datetimestamp)
+                keys = ["id","timestamp","bin_weight","bin_id"]
+                vals = [row.id, str(row.datetimestamp), row.bin_weight, row.bin_id]
+                ret["data"].append(dict(zip(keys,vals)))
+            return jsonify(ret), 200
+
+    except Exception as e:
+        return str(e), 400
 
 @app.route('/post/image',methods=['POST','GET'])
 def post_image():
