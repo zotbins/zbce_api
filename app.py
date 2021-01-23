@@ -78,6 +78,35 @@ def get_fullness():
             ret["data"].append(dict(zip(keys,vals)))
     return jsonify(ret),200
 
+@app.route('/post/weight', methods=['POST'])
+def post_weight():
+    """
+    Post Request Example:
+    {
+        "data": [
+            {
+                "datetime": "2015-11-04 15:06:25",
+                "weight": 25,
+                "bin_id": 1
+            }
+        ]
+    }
+    """
+    try:
+        if not request.json:
+            return "Request body is not in JSON format", 400
+        else:
+            post_data = request.json["data"]
+            for row in post_data:
+                # TODO: handle invalid or non-existent bin_id input
+                thebin = models.BinInfo.query.get(row["bin_id"])
+                weight_data = models.BinWeight(datetimestamp=row["datetime"], bin_weight=row["weight"], bin=thebin)
+                db.session.add(weight_data)
+                db.session.commit()
+            return "Weight succesfully added", 201
+    except Exception as e:
+        return str(e), 400
+
 
 @app.route('/post/image',methods=['POST','GET'])
 def post_image():
@@ -143,4 +172,4 @@ def allowed_file(filename):
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0',port=5001)
+    app.run(host='127.0.0.1',port=5001)
