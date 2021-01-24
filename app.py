@@ -82,7 +82,7 @@ def get_fullness():
 @app.route('/post/weight', methods=['POST'])
 def post_weight():
     """
-    Post Request Example:
+    Body Example:
     {
         "data": [
             {
@@ -99,14 +99,43 @@ def post_weight():
         else:
             post_data = request.json["data"]
             for row in post_data:
-                # TODO: handle invalid or non-existent bin_id input
+                
+                # bin_id, datetime, and weight must be present in body
+                if ("bin_id" not in row) or ("datetime" not in row) or ("weight" not in row):
+                    return "Missing key in body", 400
+
+                # bin_id, datetime, or weight cannot be null
+                if (row["bin_id"] is None) or (row["datetime"] is None) or (row["weight"] is None):
+                    return "Values cannot be null", 400
+
+                # Check if bin_id and return 400 if invalid bin_id
                 thebin = models.BinInfo.query.get(row["bin_id"])
+                if thebin is None:
+                    return "Invalid bin_id", 400
+
+                # Add weight data to db
                 weight_data = models.BinWeight(datetimestamp=row["datetime"], bin_weight=row["weight"], bin=thebin)
                 db.session.add(weight_data)
                 db.session.commit()
             return "Weight succesfully added", 201
     except Exception as e:
         return str(e), 400
+
+
+@app.route('/weight/all', methods=['GET'])
+def get_weight_all():
+    try:
+        weight_data = models.BinWeight.query.all() 
+        ret = {"data":[]}
+        for row in weight_data:
+            keys = ["timestamp","bin_weight","bin_id"]
+            vals = [str(row.datetimestamp), row.bin_weight, row.bin_id]
+            ret["data"].append(dict(zip(keys,vals)))
+        return jsonify(ret), 200
+
+    except Exception as e:
+        return str(e), 400
+
 
 @app.route('/weight', methods=['GET'])
 def get_weight():
@@ -124,15 +153,14 @@ def get_weight():
 
         # None of the parameters can be null
         if bin_id is None or start_timestamp is None or end_timestamp is None:
-            return "Invalid parameters", 400
+            return "Invalid parameter(s)", 400
         else:
             # Get entries with same bin_id and between start_timestamp and end_timestamp
             weight_data = models.BinWeight.query.filter(and_(models.BinWeight.bin_id == bin_id, between(models.BinWeight.datetimestamp, start_timestamp, end_timestamp))).all()
             ret = {"data":[]}
             for row in weight_data:
-                print(row.datetimestamp)
-                keys = ["id","timestamp","bin_weight","bin_id"]
-                vals = [row.id, str(row.datetimestamp), row.bin_weight, row.bin_id]
+                keys = ["timestamp","bin_weight","bin_id"]
+                vals = [str(row.datetimestamp), row.bin_weight, row.bin_id]
                 ret["data"].append(dict(zip(keys,vals)))
             return jsonify(ret), 200
 
