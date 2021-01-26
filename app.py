@@ -130,6 +130,34 @@ def uploaded_file(filename):
     """
     return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
 
+@app.route('/bin-fullness',methods=['GET'])
+def get_fullness_with_id():
+    """
+    Gets bin fullness and id corresponding to it given a specific id, start timestamp, and end timestamp in the request parameters.
+
+    All parameters must be provided, otherwise a 400 error is thrown.
+
+    Example get request body:
+    {"data":[{"start_timestamp":"2019-11-04 15:06:25","end_timestamp":"2016-11-04 15:06:25","id":1 }]
+    }
+
+    """
+    if request.method == 'GET':
+        id = request.args.get("id")
+        start_timestamp = request.args.get("start_timestamp")
+        end_timestamp = request.args.get("end_timestamp")
+
+        if id == None or start_timestamp == None or end_timestamp == None:
+            return "Id, start timestamp, and end timestamp must be provided", 400
+
+        bins = models.BinFullness.query.filter((models.BinFullness.id == id) &  ((start_timestamp <= models.BinFullness.datetimestamp) & (end_timestamp >= models.BinFullness.datetimestamp))).all()
+        ret = {"data":[]}
+        for the_bin in bins:
+            keys = ["id","fullness"]
+            vals = [the_bin.id,the_bin.fullness]
+            ret["data"].append(dict(zip(keys,vals)))
+    return jsonify(ret),200
+
 def allowed_file(filename):
     """
     Checks whether or not the extension name is allowed.
@@ -143,4 +171,4 @@ def allowed_file(filename):
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0',port=5001)
+    app.run()
