@@ -46,7 +46,7 @@ Follow these instructions if you would like more detail: [How to Install MySQl o
     ```
 9. You can now log in with your new user and password `mysql -u u YOURUSERNAME -p`
 10. Create your database using the SQL command: `CREATE DATABASE zotbinsCE`;
-11. Exist the MySQL shell: `exit`
+11. Exit the MySQL shell: `exit`
 11. Remember your username and password 😉
 
 #### Python
@@ -106,10 +106,16 @@ Now that you have the stack setup and your repository and your virtual environme
 ## 5 - Testing the Server
 Alright, everything should be set now!
 1. Reboot your server: `reboot`
-2. Run the unit tests
+2. Open the `unit_tests.py` file and change the following:
+    ```
+    BASEURL = "YOUR_URL"
+    IPADDRESS = "YOUR_IP_ADDRESS"
+    ```
+3. Save and close the file
+4. Run the unit tests
     ```
     su
     cd /var/www/app/app
     pytest -q unit_tests.py
     ```
-3. If there are no error messages everything should be good!
+5. If there are no error messages everything should be good!
