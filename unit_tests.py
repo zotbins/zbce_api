@@ -94,7 +94,3 @@ def test_post_image():
     with open("404.jpg", 'rb') as f:
         r = requests.post(BASEURL+"/post/image", files={"file": f})
         assert(r.status_code == 200)
-
-def test_get_image():
-    r = requests.get(url=BASEURL + "/uploads/404.jpg")
-    assert(r.status_code == 200)
