@@ -4,6 +4,7 @@ import datetime
 from flask import Flask, render_template, session, redirect, url_for, flash, jsonify, make_response, request, abort, flash, send_from_directory
 from werkzeug.utils import secure_filename
 import os
+from sqlalchemy import and_
 
 # local imports
 from config import db, app, UPLOAD_FOLDER, ALLOWED_EXTENSIONS
@@ -137,8 +138,10 @@ def get_fullness_with_id():
 
     All parameters must be provided, otherwise a 400 error is thrown.
 
+    If start timestamp is greater than the end timestamp provided, a 400 error is thrown.
+
     Example get request body:
-    {"data":[{"start_timestamp":"2019-11-04 15:06:25","end_timestamp":"2016-11-04 15:06:25","id":1 }]
+    {"data":[{"start_timestamp":"2016-11-04 15:06:25","end_timestamp":"2019-11-04 15:06:25","id":1 }]
     }
 
     """
@@ -147,14 +150,19 @@ def get_fullness_with_id():
         start_timestamp = request.args.get("start_timestamp")
         end_timestamp = request.args.get("end_timestamp")
 
+        #throw error if any required parameters are None
         if id == None or start_timestamp == None or end_timestamp == None:
             return "Id, start timestamp, and end timestamp must be provided", 400
+        
+        #throw error if start_timestamp > end_timestamp
+        if start_timestamp > end_timestamp:
+            return "start timestamp must be less than end timestamp",400
 
-        bins = models.BinFullness.query.filter((models.BinFullness.id == id) &  ((start_timestamp <= models.BinFullness.datetimestamp) & (end_timestamp >= models.BinFullness.datetimestamp))).all()
+        bins = models.BinFullness.query.filter(and_(models.BinFullness.bin_id == id, start_timestamp <= models.BinFullness.datetimestamp, end_timestamp >= models.BinFullness.datetimestamp)).all()
         ret = {"data":[]}
         for the_bin in bins:
-            keys = ["id","fullness"]
-            vals = [the_bin.id,the_bin.fullness]
+            keys = ["id","fullness", "bin_id", "datetimestamp"]
+            vals = [the_bin.id,the_bin.fullness, the_bin.bin_id, str(the_bin.datetimestamp)]
             ret["data"].append(dict(zip(keys,vals)))
     return jsonify(ret),200
 
