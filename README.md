@@ -31,7 +31,7 @@ sudo apt install apache2
 Follow these instructions if you would like more detail: [How to Install MySQl on Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04)
 
 1. `sudo apt update`
-2. `sudo apt instal lmysql-server`
+2. `sudo apt install mysql-server`
 3. `sudo mysql_secure_installation`
 4. Set password for root user from the step above
 5. Create a dedicated MySQL User and Grant Privileges using the steps below.
