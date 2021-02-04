@@ -47,39 +47,6 @@ def get_bin_info():
             ret["data"].append(dict(zip(keys,vals)))
     return jsonify(ret),200
 
-@app.route('/post/fullness',methods=['POST'])
-def post_fullness():
-    """
-    Post Request Example:
-    {"data":[{"datetime":"2015-11-04 15:06:25","fullness":50,"bin_id":1 }]
-    }
-    """
-    if request.method == 'POST':
-        if not request.json:
-            abort(400)
-        post_data = request.json["data"]
-        for row in post_data:
-            # TODO: handle invalid or non-existent bin_id input
-            thebin = models.BinInfo.query.get(row["bin_id"]) # filter_by(id=row["bin_id"]).first()
-            fullness_data = models.BinFullness(datetimestamp=row["datetime"],fullness=row["fullness"], bin=thebin)
-            db.session.add(fullness_data)
-            db.session.commit()
-    return "Created: " + str(request.json), 200
-
-@app.route('/bin-fullness/all',methods=['GET'])
-def get_fullness():
-    """
-    """
-    if request.method == 'GET':
-        fullness_data = models.BinFullness.query.all()
-        ret = {"data":[]}
-        for the_f in fullness_data:
-            keys = ["id","datetimestamp","fullness","bin_id"]
-            vals = [the_f.id,str(the_f.datetimestamp),the_f.fullness,the_f.bin_id]
-            ret["data"].append(dict(zip(keys,vals)))
-    return jsonify(ret),200
-
-
 @app.route('/post/image',methods=['POST','GET'])
 def post_image():
     """
@@ -131,9 +98,11 @@ def uploaded_file(filename):
     """
     return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
 
-@app.route('/bin-fullness',methods=['GET'])
-def get_fullness_with_id():
+@app.route('/fullness',methods=['GET', 'POST'])
+def get_fullness_info():
     """
+    GET REQUEST:
+
     Gets bin fullness and id corresponding to it given a specific id, start timestamp, and end timestamp in the request parameters.
 
     All parameters must be provided, otherwise a 400 error is thrown.
@@ -144,12 +113,24 @@ def get_fullness_with_id():
     {"data":[{"start_timestamp":"2016-11-04 15:06:25","end_timestamp":"2019-11-04 15:06:25","id":1 }]
     }
 
+    -----------------------------------------------------------------------------------------------------
+
+    POST REQUEST:
+
+    Posts entry into bin fullness table given a datetime, fullness int, and bin id.
+
+    Post Request Example:
+    {"data":[{"datetime":"2015-11-04 15:06:25","fullness":50,"bin_id":1 }]
+    }
+
+
     """
     if request.method == 'GET':
         id = request.args.get("id")
         start_timestamp = request.args.get("start_timestamp")
         end_timestamp = request.args.get("end_timestamp")
 
+        #TODO: add error codes
         #throw error if any required parameters are None
         if id == None or start_timestamp == None or end_timestamp == None:
             return "Id, start timestamp, and end timestamp must be provided", 400
@@ -163,6 +144,33 @@ def get_fullness_with_id():
         for the_bin in bins:
             keys = ["id","fullness", "bin_id", "datetimestamp"]
             vals = [the_bin.id,the_bin.fullness, the_bin.bin_id, str(the_bin.datetimestamp)]
+            ret["data"].append(dict(zip(keys,vals)))
+
+        return jsonify(ret),200
+
+    elif request.method == 'POST':
+        if not request.json:
+            abort(400)
+        post_data = request.json["data"]
+        for row in post_data:
+            print(row["bin_id"])
+            # TODO: handle invalid or non-existent bin_id input
+            thebin = models.BinInfo.query.get(row["bin_id"]) # filter_by(id=row["bin_id"]).first()
+            fullness_data = models.BinFullness(datetimestamp=row["datetime"],fullness=row["fullness"], bin=thebin)
+            db.session.add(fullness_data)
+            db.session.commit()
+        return "Created: " + str(request.json), 200
+
+@app.route('/fullness/all',methods=['GET'])
+def get_fullness():
+    """
+    """
+    if request.method == 'GET':
+        fullness_data = models.BinFullness.query.all()
+        ret = {"data":[]}
+        for the_f in fullness_data:
+            keys = ["id","datetimestamp","fullness","bin_id"]
+            vals = [the_f.id,str(the_f.datetimestamp),the_f.fullness,the_f.bin_id]
             ret["data"].append(dict(zip(keys,vals)))
     return jsonify(ret),200
 
