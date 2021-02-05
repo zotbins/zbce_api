@@ -128,64 +128,6 @@ def get_usage_all():
     except Exception as e:
         return str(e), 400
 
-
-
-@app.route('/post/fullness',methods=['POST'])
-def post_fullness():
-    """
-    Body Example:
-    {
-      "data": [
-        {
-          "datetime": "2015-11-04 15:06:25",
-          "fullness": 50,
-          "bin_id": 1
-        }
-      ]
-    }
-    """
-    try:
-        if request.method == 'POST':
-            # Check if JSON request
-            if not request.json: return "Request body is not in JSON format", 400
-
-            # Process request data
-            post_data = request.json["data"]
-            for row in post_data:
-                # bin_id, datetime, and fullness must be present in body
-                if ("bin_id" not in row) or ("datetime" not in row) or ("fullness" not in row):
-                    return "Missing key in body", 400
-
-                # bin_id, datetime, or weight cannot be null
-                if (row["bin_id"] is None) or (row["datetime"] is None) or (row["fullness"] is None):
-                    return "Values cannot be null", 400
-
-                # Check bin_id and return 400 if invalid bin_id
-                thebin = models.BinInfo.query.get(row["bin_id"])
-                if thebin is None: return "Invalid bin_id", 400
-
-                # Add fullness to db
-                fullness_data = models.BinFullness(datetimestamp=row["datetime"],fullness=row["fullness"], bin=thebin)
-                db.session.add(fullness_data)
-                db.session.commit()
-            return "Posted: " + str(request.json), 201
-    except Exception as e:
-        return str(e), 400
-
-@app.route('/bin-fullness/all',methods=['GET'])
-def get_fullness_all():
-    try:
-        if request.method == 'GET':
-            fullness_data = models.BinFullness.query.all()
-            ret = {"data":[]}
-            for the_f in fullness_data:
-                keys = ["id","datetimestamp","fullness","bin_id"]
-                vals = [the_f.id,str(the_f.datetimestamp),the_f.fullness,the_f.bin_id]
-                ret["data"].append(dict(zip(keys,vals)))
-            return jsonify(ret),200
-    except Exception as e:
-        return str(e), 400
-
 @app.route('/post/weight', methods=['POST'])
 def post_weight():
     """
@@ -326,6 +268,113 @@ def uploaded_file(filename):
     """
     return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
 
+@app.route('/fullness',methods=['GET', 'POST'])
+def get_fullness_info():
+    """
+    GET REQUEST:
+
+    Gets bin fullness and id corresponding to it given a specific id, start timestamp, and end timestamp in the request parameters.
+
+    All parameters must be provided, otherwise a 400 error is thrown.
+
+    If start timestamp is greater than the end timestamp provided, a 400 error is thrown.
+
+    Example get request body:
+    {"data":
+        [
+            {
+                "start_timestamp":"2016-11-04 15:06:25",
+                "end_timestamp":"2019-11-04 15:06:25",
+                "id":1
+            }
+        ]
+    }
+
+    -----------------------------------------------------------------------------------------------------
+
+    POST REQUEST:
+
+    Posts entry into bin fullness table given a datetime, fullness int, and bin id.
+
+    Post Request Example:
+    {"data":
+        [
+            {
+                "datetime":"2015-11-04 15:06:25",
+                "fullness":50,
+                "bin_id":1
+            }
+        ]
+    }
+
+
+    """
+    try:
+        if request.method == 'GET':
+            id = request.args.get("id")
+            start_timestamp = request.args.get("start_timestamp")
+            end_timestamp = request.args.get("end_timestamp")
+
+            #TODO: add error codes
+            #throw error if any required parameters are None
+            if id == None or start_timestamp == None or end_timestamp == None:
+                return "Id, start timestamp, and end timestamp must be provided", 400
+            
+            #throw error if start_timestamp > end_timestamp
+            if start_timestamp > end_timestamp:
+                return "start timestamp must be less than end timestamp",400
+
+            bins = models.BinFullness.query.filter(and_(models.BinFullness.bin_id == id, start_timestamp <= models.BinFullness.datetimestamp, end_timestamp >= models.BinFullness.datetimestamp)).all()
+            ret = {"data":[]}
+            for the_bin in bins:
+                keys = ["id","fullness", "bin_id", "datetimestamp"]
+                vals = [the_bin.id,the_bin.fullness, the_bin.bin_id, str(the_bin.datetimestamp)]
+                ret["data"].append(dict(zip(keys,vals)))
+
+            return jsonify(ret),200
+
+        elif request.method == 'POST':
+            # Process request data
+            if not request.json: return "Request body is not in JSON format", 400
+
+            post_data = request.json["data"]
+
+            for row in post_data:
+                # bin_id, datetime, and fullness must be present in body
+                if ("bin_id" not in row) or ("datetime" not in row) or ("fullness" not in row):
+                    return "Missing key in body", 400
+
+                # bin_id, datetime, or weight cannot be null
+                if (row["bin_id"] is None) or (row["datetime"] is None) or (row["fullness"] is None):
+                    return "Values cannot be null", 400
+
+                # Check bin_id and return 400 if invalid bin_id
+                thebin = models.BinInfo.query.get(row["bin_id"])
+                if thebin is None: return "Invalid bin_id", 400
+
+                # Add fullness to db
+                fullness_data = models.BinFullness(datetimestamp=row["datetime"],fullness=row["fullness"], bin=thebin)
+                db.session.add(fullness_data)
+                db.session.commit()
+            return "Posted: " + str(request.json), 201
+
+    except Exception as e:
+        return str(e), 400
+
+@app.route('/fullness-all',methods=['GET'])
+def get_fullness():
+    try:
+        if request.method == 'GET':
+            fullness_data = models.BinFullness.query.all()
+            ret = {"data":[]}
+            for the_f in fullness_data:
+                keys = ["id","datetimestamp","fullness","bin_id"]
+                vals = [the_f.id,str(the_f.datetimestamp),the_f.fullness,the_f.bin_id]
+                ret["data"].append(dict(zip(keys,vals)))
+            return jsonify(ret),200
+    except Exception as e:
+        return str(e), 400
+
 def allowed_file(filename):
     """
     Checks whether or not the extension name is allowed.
@@ -345,4 +394,4 @@ def paramMissing(required_params:tuple,row:iter)->bool:
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0',port=5001)
+    app.run()
