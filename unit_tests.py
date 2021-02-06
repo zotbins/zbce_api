@@ -15,8 +15,8 @@ import requests
 import create_tables
 
 # global variables
-BASEURL = "http://192.168.1.100:5001"
-IPADDRESS = "192.168.1.100"
+BASEURL = "YOUR_URL"          # Example: "http://192.168.1.100:5001"
+IPADDRESS = "YOUR_IP_ADDRESS" # Example: "192.168.1.100"
 HEADERS = {"Content-Type": "application/json","Accept": "application/json"}
 
 def test_drop_and_create_tables():
@@ -94,10 +94,6 @@ def test_get_weight_all():
     assert(r.status_code == 200)
 
 def test_get_weight_w_id():
-    """
-    **Equivalent Request**
-    `http://BASEURL:YOURPORT/weight?start_timestamp="bin_id=1&2014-11-04 15:06:25"&end_timestamp="2016-11-04 15:06:25"`
-    """
     params = {"bin_id":1,"start_timestamp":"2014-11-04 15:06:25","end_timestamp":"2021-01-29 15:06:25"}
     r = requests.get(BASEURL+"/weight",params=params,headers=HEADERS)
     print(r.json)
@@ -107,8 +103,3 @@ def test_post_image():
     with open("404.jpg", 'rb') as f:
         r = requests.post(BASEURL+"/post/image", files={"file": f})
         assert(r.status_code == 200)
-
-if __name__ == "__main__":
-    test_drop_and_create_tables()
-    test_post_bin_info()
-    test_post_fullness()
