@@ -2,8 +2,8 @@
 
 | #   | Method   | Endpoint     |
 | :-- | :---     | :---         |
-| 1   | POST/GET | /bininfo      |
-| 2   | GET      | /bininfo-all  |
+| 1   | POST/GET | /bin-info      |
+| 2   | GET      | /bin-info-all  |
 | 3   | POST/GET | /weight       |
 | 4   | GET      | /weight-all   |
 | 5   | POST/GET | /fullness     |
@@ -175,6 +175,8 @@ curl http:127.0.0.1/weight-all
 ## /fullness
 
 #### POST:
+Posts entry into bin fullness table given a datetime, fullness int, and bin id.
+
 > **Body Example:**
 >
 > ```json
@@ -201,6 +203,11 @@ assert(r.status_code == 201)
 
 
 #### GET:
+Gets bin fullness and id corresponding to it given a specific id, start timestamp, and end timestamp in the request parameters.
+
+All parameters must be provided, otherwise a 400 error is thrown.
+
+If start timestamp is greater than the end timestamp provided, a 400 error is thrown.
 
 > **Body Example:**
 >
