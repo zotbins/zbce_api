@@ -10,7 +10,7 @@ These are the basic steps to get started:
 1. Setting up the LAMP Server
 2. Installing MySQL
 3. Git Clone and Setup
-4. Changing `config.py`
+4. Create a `.env` File
 5. Testing the Server
 
 My instructions are based off of Tanner Crook's Blog, which is really well-written. If you would like more detail for any of the steps I don't explain well just follow his instructions here: [LAMP Stack with Flask](https://db.tannercrook.com/cit-225/lamp-stack-with-flask/)
@@ -94,10 +94,23 @@ sudo service vsftpd restart
     chmod 777 YOUR_UPLOAD_FOLDER_NAME
     ```
 
-## 4 - Changing `config.py`
-Now that you have the stack setup and your repository and your virtual environment. You want to modify the `config.py` file with the editor program of your choice or just use nano.
+## 4 - Create a `.env` File
+Now that you have the stack setup and your repository and your virtual environment. You want to create a `.env` file with the editor program of your choice or just use nano. This will allow you to store some variables that are supposed to be a secret like passwords, or usernames, etc. We will be using a `.env` to also store sensitive information.
 
-0. `sudo nano config.py`.
+0. `sudo nano .env`
+1. Add the following lines and replace the following portions as specified
+
+    ```bash
+    # change this to specify your MySQL Database
+    SQLALCHEMY_DATABASE_URI=mysql+pymysql://YOUR_MYSQL_USERNAME_HERE:YOUR_MYSQL_PASSWORD_HERE@localhost/zotbinsCE
+
+    # this will be used for your flask app, change the following to a secure secret key
+    SECRET_KEY=YOUR_HARD_TO_GUESSS_STRING
+
+    # change this to specify where you want the image files to be uploaded to
+    # for your upload folder make sure you change the permissions so anyone can modify it using `chmod 777`
+    UPLOAD_FOLDER=YOUR_UPLOAD_FOLDER_PATH
+    ```
 1. Change the variable: `UPLOAD_FOLDER = 'YOUR_UPLOAD_FOLDER_NAME'`
 2. Modify your secret key: `app.config['SECRET_KEY'] = 'YOUR_HARD_TO_GUESSS_STRING'`
 3. Specify your MySQL Database: `app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://YOUR_MYSQL_USERNAME_HERE:YOUR_MYSQL_PASSWORD_HERE@localhost/zotbinsCE'`

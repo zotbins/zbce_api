@@ -25,6 +25,7 @@ pycparser==2.20
 PyMySQL==0.10.1
 pyparsing==2.4.7
 pytest==6.2.1
+python-dotenv==0.15.0
 requests==2.25.1
 six==1.15.0
 sqlacodegen==2.3.0
