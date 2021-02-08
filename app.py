@@ -17,22 +17,8 @@ import zbce_queries
 def main_page():
     return "<h1>ZotBins Community Edition</h1>"
 
-@app.route('/post/bin-info',methods=['POST'])
+@app.route('/bin-info',methods=['POST'])
 def post_bin_info():
-    """
-    Body Example:
-    {
-      "data": [
-        {
-          "ip_address": "dummy",
-          "bin_height": 100,
-          "location": "your_place",
-          "bin_type": "R",
-          "waste_metrics": "FP"
-        }
-      ]
-    }
-    """
     try:
         if request.method == 'POST':
             # Check if JSON request
@@ -49,7 +35,6 @@ def post_bin_info():
                 if (row["ip_address"] is None) or (row["bin_height"] is None) or (row["location"] is None) or (row["bin_type"] is None) or (row["waste_metrics"] is None):
                     return "Values cannot be null", 400
 
-
                 bin_data = models.BinInfo(ip_address=row["ip_address"],bin_height=row["bin_height"],\
                                    location=row["location"],bin_type=row["bin_type"],\
                                    waste_metrics=row["waste_metrics"])
@@ -60,7 +45,7 @@ def post_bin_info():
         return str(e), 400
 
 
-@app.route('/bin-info/all',methods=['GET'])
+@app.route('/bin-info-all',methods=['GET'])
 def get_bin_info_all():
     try:
         if request.method == 'GET':
@@ -74,19 +59,8 @@ def get_bin_info_all():
     except Exception as e:
         return str(e), 400
 
-@app.route('/post/usage',methods=['POST'])
+@app.route('/usage',methods=['POST','GET'])
 def post_usage():
-    """
-    Body Example:
-    {
-      "data": [
-        {
-          "bin_id": 1,
-          "datetime": "2020-11-04 15:06:25"
-        }
-      ]
-    }
-    """
     try:
         if request.method == 'POST':
             # Check if JSON request
@@ -111,10 +85,29 @@ def post_usage():
                 db.session.add(usage_data)
                 db.session.commit()
             return "Posted: " + str(request.json), 201
+        elif request.method == 'GET':
+            # Get query parameters
+            bin_id = request.args.get("bin_id")
+            start_timestamp = request.args.get("start_timestamp")
+            end_timestamp = request.args.get("end_timestamp")
+
+            # None of the parameters can be null
+            if bin_id is None or start_timestamp is None or end_timestamp is None:
+                return "Invalid parameter(s)", 400
+            else:
+                # Get entries with same bin_id and between start_timestamp and end_timestamp
+                usage_data = models.BinUsage.query.filter(and_(models.BinUsage.bin_id == bin_id, between(models.BinUsage.datetimestamp, start_timestamp, end_timestamp))).all()
+                ret = {"data":[]}
+                for row in usage_data:
+                    keys = ["bin_id","timestamp"]
+                    vals = [row.bin_id,str(row.datetimestamp)]
+                    ret["data"].append(dict(zip(keys,vals)))
+                return jsonify(ret), 200
+
     except Exception as e:
         return str(e), 400
 
-@app.route('/usage/all',methods=['GET'])
+@app.route('/usage-all',methods=['GET'])
 def get_usage_all():
     try:
         if request.method == 'GET':
@@ -128,20 +121,8 @@ def get_usage_all():
     except Exception as e:
         return str(e), 400
 
-@app.route('/post/weight', methods=['POST'])
+@app.route('/weight', methods=['POST','GET'])
 def post_weight():
-    """
-    Body Example:
-    {
-        "data": [
-            {
-                "datetime": "2015-11-04 15:06:25",
-                "weight": 25,
-                "bin_id": 1
-            }
-        ]
-    }
-    """
     try:
         if request.method == 'POST':
             # Check if JSON request
@@ -168,11 +149,28 @@ def post_weight():
                 db.session.add(weight_data)
                 db.session.commit()
             return "Posted: " + str(request.json), 201
+        elif request.method == 'GET':
+            # Get query parameters
+            bin_id = request.args.get("bin_id")
+            start_timestamp = request.args.get("start_timestamp")
+            end_timestamp = request.args.get("end_timestamp")
+
+            # None of the parameters can be null
+            if bin_id is None or start_timestamp is None or end_timestamp is None:
+                return "Invalid parameter(s)", 400
+            else:
+                # Get entries with same bin_id and between start_timestamp and end_timestamp
+                weight_data = models.BinWeight.query.filter(and_(models.BinWeight.bin_id == bin_id, between(models.BinWeight.datetimestamp, start_timestamp, end_timestamp))).all()
+                ret = {"data":[]}
+                for row in weight_data:
+                    keys = ["timestamp","bin_weight","bin_id"]
+                    vals = [str(row.datetimestamp), row.bin_weight, row.bin_id]
+                    ret["data"].append(dict(zip(keys,vals)))
+                return jsonify(ret), 200
     except Exception as e:
         return str(e), 400
 
-
-@app.route('/weight/all', methods=['GET'])
+@app.route('/weight-all', methods=['GET'])
 def get_weight_all():
     try:
         weight_data = models.BinWeight.query.all()
@@ -186,145 +184,23 @@ def get_weight_all():
     except Exception as e:
         return str(e), 400
 
-
-@app.route('/weight', methods=['GET'])
-def get_weight():
-    """
-    Example Parameters:
-    bin_id = 1
-    start_timestamp = 2015-11-04 15:06:25
-    end_timestamp = 2015-11-05 15:06:25
-    """
-    try:
-        # Get query parameters
-        bin_id = request.args.get("bin_id")
-        start_timestamp = request.args.get("start_timestamp")
-        end_timestamp = request.args.get("end_timestamp")
-
-        # None of the parameters can be null
-        if bin_id is None or start_timestamp is None or end_timestamp is None:
-            return "Invalid parameter(s)", 400
-        else:
-            # Get entries with same bin_id and between start_timestamp and end_timestamp
-            weight_data = models.BinWeight.query.filter(and_(models.BinWeight.bin_id == bin_id, between(models.BinWeight.datetimestamp, start_timestamp, end_timestamp))).all()
-            ret = {"data":[]}
-            for row in weight_data:
-                keys = ["timestamp","bin_weight","bin_id"]
-                vals = [str(row.datetimestamp), row.bin_weight, row.bin_id]
-                ret["data"].append(dict(zip(keys,vals)))
-            return jsonify(ret), 200
-
-    except Exception as e:
-        return str(e), 400
-
-@app.route('/post/image',methods=['POST','GET'])
-def post_image():
-    """
-    Post Request Example:
-    """
-    ip_addr = request.remote_addr
-    if request.method == 'POST':
-        if zbce_queries.ip_bin_id(ip_addr) == None:
-            return "Invalid Ip Address", 400
-        if 'file' not in request.files:
-            flash('no file part in request')
-            return redirect(request.url)
-        file = request.files['file']
-
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-
-        img_path = UPLOAD_FOLDER + '/' + file.filename
-        if os.path.isfile(img_path):
-            return "Image already exists", 400
-
-        if file and allowed_file(file.filename):
-            # extract the extension of the file
-            ext = file.filename.split('.')[-1]
-
-            # gather the datetime stamp for the filename
-            curr_datetime = datetime.datetime.utcnow()
-            filename = secure_filename(curr_datetime.strftime("%Y-%m-%d_%H-%M-%S-%f") + "_" + ip_addr.replace(".","-") +  "." +  ext)
-
-            # save the file to the upload folder
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            return "Success", 200 #redirect(url_for('uploaded_file',filename=filename))
-
-    return '''
-        <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
-    </form>
-    '''
-
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    """
-    This function is for viewing the uploaded files we have
-    """
-    return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
-
 @app.route('/fullness',methods=['GET', 'POST'])
 def get_fullness_info():
-    """
-    GET REQUEST:
-
-    Gets bin fullness and id corresponding to it given a specific id, start timestamp, and end timestamp in the request parameters.
-
-    All parameters must be provided, otherwise a 400 error is thrown.
-
-    If start timestamp is greater than the end timestamp provided, a 400 error is thrown.
-
-    Example get request body:
-    {"data":
-        [
-            {
-                "start_timestamp":"2016-11-04 15:06:25",
-                "end_timestamp":"2019-11-04 15:06:25",
-                "id":1
-            }
-        ]
-    }
-
-    -----------------------------------------------------------------------------------------------------
-
-    POST REQUEST:
-
-    Posts entry into bin fullness table given a datetime, fullness int, and bin id.
-
-    Post Request Example:
-    {"data":
-        [
-            {
-                "datetime":"2015-11-04 15:06:25",
-                "fullness":50,
-                "bin_id":1
-            }
-        ]
-    }
-
-
-    """
     try:
         if request.method == 'GET':
-            id = request.args.get("id")
+            bin_id = request.args.get("bin_id")
             start_timestamp = request.args.get("start_timestamp")
             end_timestamp = request.args.get("end_timestamp")
 
-            #TODO: add error codes
             #throw error if any required parameters are None
             if id == None or start_timestamp == None or end_timestamp == None:
-                return "Id, start timestamp, and end timestamp must be provided", 400
-            
+                return "bin_id, start timestamp, and end timestamp must be provided", 400
+
             #throw error if start_timestamp > end_timestamp
             if start_timestamp > end_timestamp:
-                return "start timestamp must be less than end timestamp",400
+                return "start timestamp must be less than end timestamp", 400
 
-            bins = models.BinFullness.query.filter(and_(models.BinFullness.bin_id == id, start_timestamp <= models.BinFullness.datetimestamp, end_timestamp >= models.BinFullness.datetimestamp)).all()
+            bins = models.BinFullness.query.filter(and_(models.BinFullness.bin_id == bin_id, start_timestamp <= models.BinFullness.datetimestamp, end_timestamp >= models.BinFullness.datetimestamp)).all()
             ret = {"data":[]}
             for the_bin in bins:
                 keys = ["id","fullness", "bin_id", "datetimestamp"]
@@ -375,6 +251,57 @@ def get_fullness():
     except Exception as e:
         return str(e), 400
 
+@app.route('/image',methods=['POST','GET'])
+def post_image():
+    """
+    Post Request Example:
+    """
+    ip_addr = request.remote_addr
+    if request.method == 'POST':
+        if zbce_queries.ip_bin_id(ip_addr) == None:
+            return "Invalid Ip Address", 400
+        if 'file' not in request.files:
+            flash('no file part in request')
+            return redirect(request.url)
+        file = request.files['file']
+
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+
+        img_path = UPLOAD_FOLDER + '/' + file.filename
+        if os.path.isfile(img_path):
+            return "Image already exists", 400
+
+        if file and allowed_file(file.filename):
+            # extract the extension of the file
+            ext = file.filename.split('.')[-1]
+
+            # gather the datetime stamp for the filename
+            curr_datetime = datetime.datetime.utcnow()
+            filename = secure_filename(curr_datetime.strftime("%Y-%m-%d_%H-%M-%S-%f") + "_" + ip_addr.replace(".","-") +  "." +  ext)
+
+            # save the file to the upload folder
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            return "Success", 200 #redirect(url_for('uploaded_file',filename=filename))
+
+    return '''
+        <!doctype html>
+    <title>Upload new File</title>
+    <h1>Upload new File</h1>
+    <form method=post enctype=multipart/form-data>
+      <input type=file name=file>
+      <input type=submit value=Upload>
+    </form>
+    '''
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    """
+    This function is for viewing the uploaded files we have
+    """
+    return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
+
 def allowed_file(filename):
     """
     Checks whether or not the extension name is allowed.
@@ -394,4 +321,4 @@ def paramMissing(required_params:tuple,row:iter)->bool:
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0', port='5001')
