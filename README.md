@@ -97,7 +97,7 @@ sudo service vsftpd restart
 ## 4 - Create a `.env` File
 Now that you have the stack setup and your repository and your virtual environment. You want to create a `.env` file with the editor program of your choice or just use nano. This will allow you to store some variables that are supposed to be a secret like passwords, or usernames, etc. We will be using a `.env` to also store sensitive information.
 
-0. `sudo nano .env`
+0. In the project directory run: `sudo nano .env`
 1. Add the following lines and replace the following portions as specified
 
     ```bash
@@ -111,10 +111,8 @@ Now that you have the stack setup and your repository and your virtual environme
     # for your upload folder make sure you change the permissions so anyone can modify it using `chmod 777`
     UPLOAD_FOLDER=YOUR_UPLOAD_FOLDER_PATH
     ```
-1. Change the variable: `UPLOAD_FOLDER = 'YOUR_UPLOAD_FOLDER_NAME'`
-2. Modify your secret key: `app.config['SECRET_KEY'] = 'YOUR_HARD_TO_GUESSS_STRING'`
-3. Specify your MySQL Database: `app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://YOUR_MYSQL_USERNAME_HERE:YOUR_MYSQL_PASSWORD_HERE@localhost/zotbinsCE'`
-4. Turn off or turn on Debugging options. You should turn off debugging, when you want your server to run in production mode: `app.config['DEBUG'] = True # turn this off when not debugging.`
+2. Close and save the file.
+3. In `config.py` Turn off or turn on Debugging options. You should turn off debugging, when you want your server to run in production mode: `app.config['DEBUG'] = True # turn this off when not debugging.`
 
 ## 5 - Testing the Server
 Alright, everything should be set now!
