@@ -1,11 +1,12 @@
 import os
+from pathlib import Path
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 
-# load environment variables 
-load_dotenv()
-
+# load environment variables
+dotenv_path = Path("/var/www/app/app/.env")
+load_dotenv(dotenv_path=dotenv_path)
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
