@@ -267,10 +267,7 @@ def post_image():
     """
     Post Request Example:
     """
-    ip_addr = request.remote_addr
     if request.method == 'POST':
-        if zbce_queries.ip_bin_id(ip_addr) == None:
-            raise Error("INVALID_IP_ADDR")
         if 'file' not in request.files:
             flash('no file part in request')
             return redirect(request.url)
@@ -280,17 +277,17 @@ def post_image():
             flash('No selected file')
             return redirect(request.url)
 
-        img_path = UPLOAD_FOLDER + '/' + file.filename
-        if os.path.isfile(img_path):
-            raise Error("IMAGE_EXISTS")
-
         if file and allowed_file(file.filename):
-            # extract the extension of the file
-            ext = file.filename.split('.')[-1]
-
             # gather the datetime stamp for the filename
             curr_datetime = datetime.datetime.utcnow()
-            filename = secure_filename(curr_datetime.strftime("%Y-%m-%d_%H-%M-%S-%f") + "_" + ip_addr.replace(".","-") +  "." +  ext)
+
+            # create filename
+            filename = secure_filename(curr_datetime.strftime("%Y-%m-%d_%H-%M-%S-%f") + "_" + file.filename)
+
+            # check if file already exists
+            img_path = UPLOAD_FOLDER + '/' + filename
+            if os.path.isfile(img_path):
+                raise Error("IMAGE_EXISTS")
 
             # save the file to the upload folder
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
