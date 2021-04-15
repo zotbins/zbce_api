@@ -14,7 +14,7 @@ This is the basic outline for setting up your development environment:
 5. Creating Tables in Database
 6. Running the Server
 
-### Cloning ZBCE Repository
+###1 - Cloning ZBCE Repository
 Following the instructions listed, you will be able to clone the ZBCE Repository; however, if you would like a more thorough guide/step-by-step, visit the GitHub Docs guide for cloning a repository: https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository.
 
 1. Open an empty folder (or the folder you would like to clone the repo into) and navigate to that folder using a terminal
@@ -23,7 +23,7 @@ Following the instructions listed, you will be able to clone the ZBCE Repository
 
 After these steps, you should be able to access the ZBCE repo from your computer.
 
-### Setting up Python
+### 2 - Setting up Python
 1. Download the appropriate Python version for your OS from https://www.python.org/downloads/
 2. Unzip the python file and follow the Python's setup instructions given
 
@@ -35,7 +35,7 @@ Once Python is downloaded on your device, you will need to create a virtual envi
    For MacOS or Linux type and run `source venv/bin/activate`
 3. Install packages within the virtual environment with `pip install -r requirements.txt`
 
-### Installing MySQL
+### 3 - Installing MySQL
 1. Download the MySQL workbench and server DB for your OS using https://dev.mysql.com/downloads/workbench/
 2. Unzip the msi files and follow the setup instructions as given
 
@@ -52,7 +52,7 @@ Once MySQL is installed (workbench and server), you will have to connect to the 
 5. Run this query once to create the database (click on lightning bolt to run):
    CREATE DATABASE zotbinsCE;
 
-### Creating a '.env' file
+### 4 - Creating a '.env' file
 1. Create an .env file in the same directory 
 2. Input this into the .env file and change the parameters to match your username and password
     ```
@@ -68,11 +68,11 @@ Once MySQL is installed (workbench and server), you will have to connect to the 
     ```
 3. Save your changes
 
-### Creating Tables in Database
+### 5 - Creating Tables in Database
 1. Create the tables in your database by running `python create_tables.py`
 2. If set up successfully, you should see new tables added in mySQL Workbench
 
-### Running the Server
+### 6 - Running the Server
 1. Type and run `python app.py` into your terminal
 2. Check where to access your API by looking at “Running on” section on the command line
 3. Use Postman for further tests if desired
