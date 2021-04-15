@@ -1,13 +1,16 @@
-# library imports
+# built-in library imports
 import json
 import datetime
+import os
+import glob
+
+# flask related imports
 from flask import Flask, render_template, session, redirect, url_for, flash, jsonify, make_response, request, abort, flash, send_from_directory
 from werkzeug.utils import secure_filename
-import os
 from sqlalchemy import between, and_
-from error import Error
 
-# local imports
+# local custom imports
+from error import Error
 from config import db, app, UPLOAD_FOLDER, ALLOWED_EXTENSIONS
 import models
 import zbce_queries
@@ -292,16 +295,12 @@ def post_image():
             # save the file to the upload folder
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             return "Success", 200 #redirect(url_for('uploaded_file',filename=filename))
-
-    return '''
-        <!doctype html>
-    <title>Upload new File</title>
-    <h1>Upload new File</h1>
-    <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
-      <input type=submit value=Upload>
-    </form>
-    '''
+    else:
+        # return a list of images
+        img_names = [os.path.basename(x) for x in glob.glob(UPLOAD_FOLDER + '/*.jpg')]# glob.glob(UPLOAD_FOLDER + '/*.jpg')
+        img_names.reverse()
+         # TODO: include a hard limit on the number of files returned (current set at 1000)
+        return jsonify({"image_names": img_names[1:1000]}),200
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
