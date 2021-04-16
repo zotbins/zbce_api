@@ -14,7 +14,7 @@ This is the basic outline for setting up your development environment:
 5. Creating Tables in Database
 6. Running the Server
 
-###1 - Cloning ZBCE Repository
+### 1 - Cloning ZBCE Repository
 Following the instructions listed, you will be able to clone the ZBCE Repository; however, if you would like a more thorough guide/step-by-step, visit the GitHub Docs guide for cloning a repository: https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository.
 
 1. Open an empty folder (or the folder you would like to clone the repo into) and navigate to that folder using a terminal
