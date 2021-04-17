@@ -16,6 +16,8 @@ import models
 import zbce_queries
 
 # TODO: Condense code and create functions/decorators for repeptitive code
+# TODO: set the hardlimit somewhere else
+limit_request = 1000
 
 @app.route('/')
 def main_page():
@@ -49,7 +51,6 @@ def post_bin_info():
         return Error.em[str(e)]
     except Exception as e:
         return str(e), 400
-
 
 @app.route('/bin-info-all',methods=['GET'])
 def get_bin_info_all():
@@ -285,7 +286,7 @@ def post_image():
             curr_datetime = datetime.datetime.utcnow()
 
             # create filename
-            filename = secure_filename(curr_datetime.strftime("%Y-%m-%d_%H-%M-%S-%f") + "_" + file.filename)
+            filename = secure_filename(curr_datetime.strftime("%Y-%m-%d_%H-%M-%S") + "_" + file.filename)
 
             # check if file already exists
             img_path = UPLOAD_FOLDER + '/' + filename
@@ -299,8 +300,7 @@ def post_image():
         # return a list of images
         img_names = [os.path.basename(x) for x in glob.glob(UPLOAD_FOLDER + '/*.jpg')]# glob.glob(UPLOAD_FOLDER + '/*.jpg')
         img_names.reverse()
-         # TODO: include a hard limit on the number of files returned (current set at 1000)
-        return jsonify({"image_names": img_names[1:1000]}),200
+        return jsonify({"image_names": img_names[1:limit_request]}),200
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
