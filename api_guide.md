@@ -11,6 +11,7 @@
 | 7   | POST/GET | /usage        |
 | 8   | GET      | /usage-all    |
 | 9   | POST/GET | /image        |
+| 10  | GET      | /metric-csv
 
 
 ## /bininfo
@@ -246,7 +247,7 @@ If start timestamp is greater than the end timestamp provided, a 400 error is th
 >```
 ## fullness-all
 
-**GET:**
+#### GET:
 > **Request Example (Python)**
 > ```python
 >import requests
@@ -269,7 +270,7 @@ If start timestamp is greater than the end timestamp provided, a 400 error is th
 
 ## /usage
 
-**POST:**
+#### POST:
 
 > **Body Example:**
 > ```json
@@ -329,7 +330,7 @@ If start timestamp is greater than the end timestamp provided, a 400 error is th
 >  ]
 >}
 > ```
-## usage-all
+## /usage-all
 
 #### GET:
 
@@ -357,3 +358,13 @@ If start timestamp is greater than the end timestamp provided, a 400 error is th
 >  ]
 >}
 > ```
+
+## /metric-csv
+
+#### GET:
+
+> **Request Example (curl)
+>
+> ```bash
+>curl 'http://127.0.0.1/metric-csv?metric=fullness&start_timestamp=2015-11-04%2015:06:25&end_timestamp=2021-04-1%2015:06:25'
+>```
