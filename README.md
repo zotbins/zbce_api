@@ -77,7 +77,7 @@ Once MySQL is installed (workbench and server), you will have to connect to the 
 2. Check where to access your API by looking at “Running on” section on the command line
 3. Use Postman for further tests if desired
 
-Congratulations you successfully set up your devlopment environment! 
+Congratulations you successfully set up your development environment! 
 
 
 
