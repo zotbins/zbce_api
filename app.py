@@ -21,7 +21,7 @@ import zbce_queries
 def main_page():
     return "<h1>ZotBins Community Edition</h1>"
 
-@app.route('/bin-info',methods=['POST'])
+@app.route('/bin-info',methods=['POST', 'GET'])
 def post_bin_info():
     try:
         if request.method == 'POST':
@@ -45,6 +45,22 @@ def post_bin_info():
                 db.session.add(bin_data)
                 db.session.commit()
             return "Posted: " + str(request.json), 201
+        elif request.method == 'GET':
+            bin_id = request.args.get("bin_id") # make sure you have the bin id
+            
+            
+            if bin_id is None: # checking is bin exists
+                raise Error("NULL_VALUE")
+            else:
+                # Get entries with same bin_id and between start_timestamp and end_timestamp
+                bin_data = models.BinInfo.query.filter(models.BinInfo.id == bin_id).all() # returns the bin data with matching bin id
+                if len(bin_data) > 0: # check if the bin id surpasses the amount of bins in database
+                    b = bin_data[0]
+                    keys = ["id","ip_address","bin_height","location","bin_type","waste_metrics"] # keys
+                    vals = [b.id,b.ip_address,b.bin_height,b.location,b.bin_type,b.waste_metrics] # values
+                    return jsonify(dict(zip(keys,vals))), 200 # return the json of the keys and values :)
+                else:
+                    return jsonify({"message": "No Bin Found"}), 404 # return error message is there's an error
     except Error as e:
         return Error.em[str(e)]
     except Exception as e:
