@@ -8,6 +8,7 @@ import glob
 from flask import Flask, render_template, session, redirect, url_for, flash, jsonify, make_response, request, abort, flash, send_from_directory
 from werkzeug.utils import secure_filename
 from sqlalchemy import between, and_
+import pandas
 
 # local custom imports
 from error import Error
@@ -16,6 +17,8 @@ import models
 import zbce_queries
 
 # TODO: Condense code and create functions/decorators for repeptitive code
+# TODO: set the hardlimit somewhere else
+limit_request = 1000
 
 @app.route('/')
 def main_page():
@@ -65,7 +68,6 @@ def post_bin_info():
         return Error.em[str(e)]
     except Exception as e:
         return str(e), 400
-
 
 @app.route('/bin-info-all',methods=['GET'])
 def get_bin_info_all():
@@ -301,7 +303,7 @@ def post_image():
             curr_datetime = datetime.datetime.utcnow()
 
             # create filename
-            filename = secure_filename(curr_datetime.strftime("%Y-%m-%d_%H-%M-%S-%f") + "_" + file.filename)
+            filename = secure_filename(curr_datetime.strftime("%Y-%m-%d_%H-%M-%S") + "_" + file.filename)
 
             # check if file already exists
             img_path = UPLOAD_FOLDER + '/' + filename
@@ -315,8 +317,7 @@ def post_image():
         # return a list of images
         img_names = [os.path.basename(x) for x in glob.glob(UPLOAD_FOLDER + '/*.jpg')]# glob.glob(UPLOAD_FOLDER + '/*.jpg')
         img_names.reverse()
-         # TODO: include a hard limit on the number of files returned (current set at 1000)
-        return jsonify({"image_names": img_names[1:1000]}),200
+        return jsonify({"image_names": img_names[1:limit_request]}),200
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
@@ -324,6 +325,75 @@ def uploaded_file(filename):
     This function is for viewing the uploaded files we have
     """
     return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
+
+@app.route('/metric-csv', methods=['GET'])
+def get_metrics_as_csv():
+    """
+    **GET Request Parameters**
+    > `metric`
+    > `start_timestamp`
+    > `end_timestamp`
+    """
+    try:
+        # get request parameters
+        metric = request.args.get("metric")
+        start_timestamp = request.args.get("start_timestamp")
+        end_timestamp = request.args.get("end_timestamp")
+
+        #throw error if any required parameters are None
+        if None in [metric, start_timestamp, end_timestamp]:
+            raise Error("NULL_VALUE")
+
+        # generate all function queries
+        fullness_query = models.BinFullness.query.filter(and_(start_timestamp <= models.BinFullness.datetimestamp, end_timestamp >= models.BinFullness.datetimestamp)).all
+        weight_query = models.BinWeight.query.filter(and_(start_timestamp <= models.BinWeight.datetimestamp, end_timestamp >= models.BinWeight.datetimestamp)).all
+        usage_query = models.BinUsage.query.filter(and_(start_timestamp <= models.BinUsage.datetimestamp, end_timestamp >= models.BinUsage.datetimestamp)).all
+
+        # generate dict of functions for querying specific data metric
+        data_query_func = {"fullness":fullness_query, "weight":weight_query, "usage":usage_query}
+
+        # check if parameters are valid
+        if metric not in data_query_func.keys():
+            raise Error("INVALID_PARAM")
+
+        #throw error if start_timestamp > end_timestamp
+        if start_timestamp > end_timestamp:
+            raise Error("TIMESTAMP_ISSUE")
+
+        # call query function
+        query_data = data_query_func[metric]()
+
+        # iterate through each row of data
+        obj_dict = None
+        for row in query_data:
+            # convert fullness data into dictionary form such as {key1:str1, key2:str2}
+            row_dict_form = dict(row)
+
+            # assign obj_dict to appropriate keys based on model schema
+            if not obj_dict:
+                headers = row_dict_form.keys()
+                # create a dictionary of empty lists such as {key1:[], key2:[]}
+                obj_dict = dict(zip(headers, [[] for i in range(len(headers))]))
+
+            # append data to the obj_dict based on keys
+            for k in obj_dict.keys():
+                obj_dict[k].append(row_dict_form[k])
+
+        # create the pandas dataframe
+        df = pandas.DataFrame(obj_dict)
+        resp = make_response(df.to_csv(index=False))
+        file_name = "{}_{}_{}.csv".format(metric,start_timestamp,end_timestamp)
+        resp.headers["Content-Disposition"] = "attachment; filename=" + file_name
+        resp.headers["Content-Type"] = "text/csv"
+
+        # return as CSV file
+        return resp
+
+    except Error as e:
+        return Error.em[str(e)]
+
+    except Exception as e:
+        return str(e), 400
 
 def allowed_file(filename):
     """
