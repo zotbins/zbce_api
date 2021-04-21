@@ -119,7 +119,7 @@ def post_usage():
 def get_usage_all():
     try:
         if request.method == 'GET':
-            usages = models.BinUsage.query.all()
+            usages = models.BinUsage.query.order_by(models.BinUsage.datetimestamp.desc()).limit(50).all()
             ret = {"data":[]}
             for u in usages:
                 keys = ["id","datetime","bin_id"]
@@ -184,7 +184,7 @@ def post_weight():
 @app.route('/weight-all', methods=['GET'])
 def get_weight_all():
     try:
-        weight_data = models.BinWeight.query.all()
+        weight_data = models.BinWeight.query.order_by(models.BinWeight.datetimestamp.desc()).limit(50).all()
         ret = {"data":[]}
         for row in weight_data:
             keys = ["timestamp","bin_weight","bin_id"]
@@ -255,7 +255,7 @@ def get_fullness_info():
 def get_fullness():
     try:
         if request.method == 'GET':
-            fullness_data = models.BinFullness.query.all()
+            fullness_data = models.BinFullness.query.order_by(models.BinFullness.datetimestamp.desc()).limit(50).all()
             ret = {"data":[]}
             for the_f in fullness_data:
                 keys = ["id","datetimestamp","fullness","bin_id"]
