@@ -61,3 +61,9 @@ class BinUsage(db.Model):
         iter_keys = ["id","datetimestamp","bin_id"]
         iter_vals = [str(self.id), str(self.datetimestamp), str(self.bin_id)]
         return iter(zip(iter_keys, iter_vals))
+
+class BarcodeItem(db.Model):
+    __tablename__ = "barcodes"
+    barcode = db.Column(db.Integer, primary_key=True)
+    item = db.Column(db.String)
+    bin = db.Column(db.String)

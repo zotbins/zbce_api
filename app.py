@@ -413,5 +413,45 @@ def paramMissing(required_params:tuple,row:iter)->bool:
 #     return jsonify({"imageNames":onlyfiles})
 
 
+@app.route('/barcode/<barcode_num>', methods = ["GET"])
+def respond_with_barcode_info(barcode_num):
+    try:
+        return zbce_queries.get_bin(barcode_num)
+    except Exception as e:
+        print(e)
+        response = make_response(
+            jsonify({"message":"Barcode not found"}),
+            404
+        )
+        return response
+
+@app.route('/barcode', methods = ["POST"])
+def update_db_with_barcode_info():
+    data = request.get_json()
+
+    try:
+        zbce_queries.add_barcode_item(**data)
+        response = make_response(
+            jsonify(
+                {
+                    "message": "success",
+                    "data": data
+                }
+            ),
+            201
+        )
+        return response
+    except Exception as e:
+        print(e)
+        response = make_response(
+            jsonify(
+                {
+                    "message": "unable to add barcode"
+                },
+                409
+            )
+        )
+        return response
+
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port='5001')

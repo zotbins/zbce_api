@@ -28,3 +28,23 @@ def ip_bin_id(ip_addr):
     if bin == None:
         return None
     return bin.id
+
+def add_barcode_item(barcode: int, item_info: str, waste_bin: str):
+    """
+    Add to the barcode table
+    """
+    barcode_item = models.BarcodeItem.query.filter_by(barcode=barcode).first()
+    if barcode_item:
+        raise Exception
+    barcode_item = models.BarcodeItem(barcode=barcode,item=item_info,bin=waste_bin)
+    db.session.add(barcode_item)
+    db.session.commit()
+
+def get_bin(barcode: int):
+    """
+    Queries for appropriate bin based on barcode
+    """
+    barcode_item = models.BarcodeItem.query.filter_by(barcode=barcode).first()
+    if barcode_item == None:
+        return None
+    return barcode_item.bin
