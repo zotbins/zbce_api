@@ -417,10 +417,15 @@ def paramMissing(required_params:tuple,row:iter)->bool:
 def respond_with_barcode_info(barcode_num):
     try:
         return zbce_queries.get_bin(barcode_num)
+    except Error as e:
+        return Error.em[str(e)]
     except Exception as e:
         print(e)
         response = make_response(
-            jsonify({"message":"Barcode not found"}),
+            jsonify({
+                "message": "exception occured",
+                "exception": e
+            }),
             404
         )
         return response
@@ -441,12 +446,15 @@ def update_db_with_barcode_info():
             201
         )
         return response
+    except Error as e:
+        return Error.em[str(e)]
     except Exception as e:
         print(e)
         response = make_response(
             jsonify(
                 {
-                    "message": "unable to add barcode"
+                    "message": "exception occured",
+                    "exception": e
                 },
                 409
             )

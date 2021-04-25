@@ -10,6 +10,7 @@ import requests
 # local imports
 from config import db, app, UPLOAD_FOLDER, ALLOWED_EXTENSIONS
 import models
+import error
 
 
 def ip_valid(ip_addr:str)->bool:
@@ -35,7 +36,7 @@ def add_barcode_item(barcode: int, item_info: str, waste_bin: str):
     """
     barcode_item = models.BarcodeItem.query.filter_by(barcode=barcode).first()
     if barcode_item:
-        raise Exception
+        raise error.Error("DUPLICATE_BARCODE_ID")
     barcode_item = models.BarcodeItem(barcode=barcode,item=item_info,bin=waste_bin)
     db.session.add(barcode_item)
     db.session.commit()
@@ -46,5 +47,5 @@ def get_bin(barcode: int):
     """
     barcode_item = models.BarcodeItem.query.filter_by(barcode=barcode).first()
     if barcode_item == None:
-        return None
+        raise error.Error("BARCODE_NOT_FOUND")
     return barcode_item.bin
