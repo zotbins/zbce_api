@@ -64,6 +64,6 @@ class BinUsage(db.Model):
 
 class BarcodeItem(db.Model):
     __tablename__ = "barcodes"
-    barcode = db.Column(db.Integer, primary_key=True)
+    barcode = db.Column(db.String, primary_key=True)
     item = db.Column(db.String)
     bin = db.Column(db.String)
