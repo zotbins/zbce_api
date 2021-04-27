@@ -50,8 +50,7 @@ def post_bin_info():
             return "Posted: " + str(request.json), 201
         elif request.method == 'GET':
             bin_id = request.args.get("bin_id") # make sure you have the bin id
-            
-            
+
             if bin_id is None: # checking is bin exists
                 raise Error("NULL_VALUE")
             else:
@@ -217,10 +216,9 @@ def get_weight_all():
 def get_fullness_info():
     try:
         if request.method == 'GET':
-            bin_id = request.args.get("id")
+            bin_id = request.args.get("bin_id")
             start_timestamp = request.args.get("start_timestamp")
             end_timestamp = request.args.get("end_timestamp")
-
             #throw error if any required parameters are None
             if bin_id == None or start_timestamp == None or end_timestamp == None:
                 raise Error("NULL_VALUE")
