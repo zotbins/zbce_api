@@ -8,7 +8,7 @@ import glob
 from flask import Flask, render_template, session, redirect, url_for, flash, jsonify, make_response, request, abort, flash, send_from_directory
 from werkzeug.utils import secure_filename
 from sqlalchemy import between, and_
-#import pandas
+import pandas
 
 # local custom imports
 from error import Error
