@@ -8,7 +8,7 @@ import glob
 from flask import Flask, render_template, session, redirect, url_for, flash, jsonify, make_response, request, abort, flash, send_from_directory
 from werkzeug.utils import secure_filename
 from sqlalchemy import between, and_
-import pandas
+#import pandas
 
 # local custom imports
 from error import Error
@@ -25,7 +25,7 @@ def main_page():
     return "<h1>ZotBins Community Edition</h1>"
 
 @app.route('/bin-info',methods=['POST', 'GET'])
-def post_bin_info():
+def bin_info():
     try:
         if request.method == 'POST':
             # Check if JSON request
@@ -42,11 +42,10 @@ def post_bin_info():
                 if (row["ip_address"] is None) or (row["bin_height"] is None) or (row["location"] is None) or (row["bin_type"] is None) or (row["waste_metrics"] is None):
                     raise Error("NULL_VALUE")
 
-                bin_data = models.BinInfo(ip_address=row["ip_address"],bin_height=row["bin_height"],\
+                addToDatabase(models.BinInfo(ip_address=row["ip_address"],bin_height=row["bin_height"],\
                                    location=row["location"],bin_type=row["bin_type"],\
-                                   waste_metrics=row["waste_metrics"])
-                db.session.add(bin_data)
-                db.session.commit()
+                                   waste_metrics=row["waste_metrics"]))
+
             return "Posted: " + str(request.json), 201
         elif request.method == 'GET':
             bin_id = request.args.get("bin_id") # make sure you have the bin id
@@ -83,7 +82,7 @@ def get_bin_info_all():
         return str(e), 400
 
 @app.route('/usage',methods=['POST','GET'])
-def post_usage():
+def usage():
     try:
         if request.method == 'POST':
             # Check if JSON request
@@ -104,9 +103,8 @@ def post_usage():
                 if thebin is None: raise Error("INVALID_BIN_ID")
 
                 # Add datetimestamp to db
-                usage_data = models.BinUsage(datetimestamp=row["datetime"], bin=thebin)
-                db.session.add(usage_data)
-                db.session.commit()
+                addToDatabase(models.BinUsage(datetimestamp=row["datetime"], bin=thebin))
+
             return "Posted: " + str(request.json), 201
         elif request.method == 'GET':
             # Get query parameters
@@ -147,7 +145,7 @@ def get_usage_all():
         return str(e), 400
 
 @app.route('/weight', methods=['POST','GET'])
-def post_weight():
+def weight():
     try:
         if request.method == 'POST':
             # Check if JSON request
@@ -170,9 +168,8 @@ def post_weight():
                     raise Error("INVALID_BIN_ID")
 
                 # Add weight data to db
-                weight_data = models.BinWeight(datetimestamp=row["datetime"], bin_weight=row["weight"], bin=thebin)
-                db.session.add(weight_data)
-                db.session.commit()
+                addToDatabase(models.BinWeight(datetimestamp=row["datetime"], bin_weight=row["weight"], bin=thebin))
+
             return "Posted: " + str(request.json), 201
         elif request.method == 'GET':
             # Get query parameters
@@ -213,7 +210,7 @@ def get_weight_all():
         return str(e), 400
 
 @app.route('/fullness',methods=['GET', 'POST'])
-def get_fullness_info():
+def fullness_info():
     try:
         if request.method == 'GET':
             bin_id = request.args.get("bin_id")
@@ -256,9 +253,8 @@ def get_fullness_info():
                 if thebin is None: raise Error("INVALID_BIN_ID")
 
                 # Add fullness to db
-                fullness_data = models.BinFullness(datetimestamp=row["datetime"],fullness=row["fullness"], bin=thebin)
-                db.session.add(fullness_data)
-                db.session.commit()
+                addToDatabase(models.BinFullness(datetimestamp=row["datetime"],fullness=row["fullness"], bin=thebin))
+
             return "Posted: " + str(request.json), 201
 
     except Error as e:
@@ -404,6 +400,11 @@ def paramMissing(required_params:tuple,row:iter)->bool:
         if p not in row:
             return True
     return False
+
+#adding to database function
+def addToDatabase(data):
+    db.session.add(data)
+    db.session.commit()
 
 # @app.route('/observation/get/image-list', methods=['GET'])
 # def image_names():
