@@ -130,19 +130,19 @@ def usage():
     except Exception as e:
         return str(e), 400
 
-@app.route('/usage-all',methods=['GET'])
-def get_usage_all():
+@app.route('/usage-today',methods=['GET'])
+def get_usage_today():
     try:
-        if request.method == 'GET':
-            usages = models.BinUsage.query.order_by(models.BinUsage.datetimestamp.desc()).limit(50).all()
-            ret = {"data":[]}
-            for u in usages:
-                keys = ["id","datetime","bin_id"]
-                vals = [u.id,str(u.datetimestamp),u.bin_id]
-                ret["data"].append(dict(zip(keys,vals)))
-            return jsonify(ret),200
+        usage_data = models.BinUsage.query.filter(models.BinUsage.datetimestamp>datetime.datetime.now().strftime("%Y-%m-%d")).all()
+        ret = {"data":[]}
+        for row in usage_data:
+            keys = ["id","datetimestamp", "bin_id"] #["id","datetime","bin_id"]
+            vals = [row.id, str(row.datetimestamp), row.bin_id]
+            ret["data"].append(dict(zip(keys,vals)))
+        return jsonify(ret),200
     except Exception as e:
         return str(e), 400
+
 
 @app.route('/weight', methods=['POST','GET'])
 def weight():
@@ -195,14 +195,14 @@ def weight():
     except Exception as e:
         return str(e), 400
 
-@app.route('/weight-all', methods=['GET'])
-def get_weight_all():
+@app.route('/weight-today', methods=['GET'])
+def get_weight_today():
     try:
-        weight_data = models.BinWeight.query.order_by(models.BinWeight.datetimestamp.desc()).limit(50).all()
+        weight_data = models.BinWeight.query.filter(models.BinWeight.datetimestamp>datetime.datetime.now().strftime("%Y-%m-%d")).all()
         ret = {"data":[]}
         for row in weight_data:
-            keys = ["timestamp","bin_weight","bin_id"]
-            vals = [str(row.datetimestamp), row.bin_weight, row.bin_id]
+            keys = ["id", "timestamp", "bin_weight", "bin_id"]
+            vals = [row.id, str(row.datetimestamp), row.bin_weight, row.bin_id]
             ret["data"].append(dict(zip(keys,vals)))
         return jsonify(ret), 200
 
@@ -263,11 +263,11 @@ def fullness_info():
     except Exception as e:
         return str(e), 400
 
-@app.route('/fullness-all',methods=['GET'])
+@app.route('/fullness-today',methods=['GET'])
 def get_fullness():
     try:
         if request.method == 'GET':
-            fullness_data = models.BinFullness.query.order_by(models.BinFullness.datetimestamp.desc()).limit(50).all()
+            fullness_data = models.BinFullness.query.filter(models.BinFullness.datetimestamp>datetime.datetime.now().strftime("%Y-%m-%d")).all()
             ret = {"data":[]}
             for the_f in fullness_data:
                 keys = ["id","datetimestamp","fullness","bin_id"]
@@ -311,7 +311,7 @@ def post_image():
         # return a list of images
         img_names = [os.path.basename(x) for x in glob.glob(UPLOAD_FOLDER + '/*.jpg')]# glob.glob(UPLOAD_FOLDER + '/*.jpg')
         img_names.reverse()
-        return jsonify({"image_names": img_names[0:limit_request]}),200
+        return jsonify({"image_names": img_names[1:limit_request]}),200
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
@@ -405,12 +405,6 @@ def paramMissing(required_params:tuple,row:iter)->bool:
 def addToDatabase(data):
     db.session.add(data)
     db.session.commit()
-
-# @app.route('/observation/get/image-list', methods=['GET'])
-# def image_names():
-#     onlyfiles = [f for f in os.listdir(UPLOAD_FOLDER) if os.path.isfile(os.path.join(UPLOAD_FOLDER, f))]
-#     return jsonify({"imageNames":onlyfiles})
-
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port='5001')
