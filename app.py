@@ -311,7 +311,7 @@ def post_image():
         # return a list of images
         img_names = [os.path.basename(x) for x in glob.glob(UPLOAD_FOLDER + '/*.jpg')]# glob.glob(UPLOAD_FOLDER + '/*.jpg')
         img_names.reverse()
-        return jsonify({"image_names": img_names[1:limit_request]}),200
+        return jsonify({"image_names": img_names[0:limit_request]}),200
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
