@@ -9,6 +9,7 @@ import json
 # local imports
 from config import db
 
+
 class BinInfo(db.Model):
     __tablename__ = 'bins'
 
@@ -34,11 +35,6 @@ class BinFullness(db.Model):
     fullness = db.Column(db.Float)
     bin_id = db.Column(db.Integer,db.ForeignKey('bins.id'))
 
-    def __iter__(self):
-        iter_keys = ["id","datetimestamp","fullness","bin_id"]
-        iter_vals = [str(self.id), str(self.datetimestamp), str(self.fullness), str(self.bin_id)]
-        return iter(zip(iter_keys, iter_vals))
-
 class BinWeight(db.Model):
     __tablename__ = 'weight'
     id = db.Column(db.Integer, primary_key=True)
@@ -46,18 +42,8 @@ class BinWeight(db.Model):
     bin_weight = db.Column(db.Float)
     bin_id = db.Column(db.Integer,db.ForeignKey('bins.id'))
 
-    def __iter__(self):
-        iter_keys = ["id","datetimestamp","bin_weight","bin_id"]
-        iter_vals = [str(self.id), str(self.datetimestamp), str(self.bin_weight), str(self.bin_id)]
-        return iter(zip(iter_keys, iter_vals))
-
 class BinUsage(db.Model):
     __tablename__ = 'binusage'
     id = db.Column(db.Integer, primary_key=True)
     datetimestamp = db.Column(db.DateTime)
     bin_id = db.Column(db.Integer,db.ForeignKey('bins.id'))
-
-    def __iter__(self):
-        iter_keys = ["id","datetimestamp","bin_id"]
-        iter_vals = [str(self.id), str(self.datetimestamp), str(self.bin_id)]
-        return iter(zip(iter_keys, iter_vals))
