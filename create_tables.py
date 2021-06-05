@@ -6,9 +6,9 @@ about the project https://zotbins.github.io/zbceblog
 
 from models import db
 
+
 def recreate_tables():
-    """
-    """
+    """ """
     print("Dropping all tables in specified database...")
     db.drop_all()
     print("Dropped.")
@@ -16,6 +16,7 @@ def recreate_tables():
     print("Creating all tables in specified database...")
     db.create_all()
     print("Created.")
+
 
 if __name__ == "__main__":
     recreate_tables()
