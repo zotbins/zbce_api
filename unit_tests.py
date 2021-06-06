@@ -85,7 +85,7 @@ def test_get_bin_usage():
 
 
 def test_get_usage_all():
-    r = requests.get(url=BASEURL + "/usage-all")
+    r = requests.get(url=BASEURL + "/usage-today")
     print(r.json())
     assert r.status_code == 200
 
@@ -106,7 +106,7 @@ def test_get_fullness_all():
     **Equivalent Request**
     `http://BASEURL:YOURPORT/bin-fullness/all`
     """
-    r = requests.get(url=BASEURL + "/fullness-all")
+    r = requests.get(url=BASEURL + "/fullness-today")
     print(r.json())
     assert r.status_code == 200
 
@@ -142,7 +142,7 @@ def test_get_weight_all():
     **Equivalent Request**
     `http://BASEURL:YOURPORT/weight/all`
     """
-    r = requests.get(url=BASEURL + "/weight-all")
+    r = requests.get(url=BASEURL + "/weight-today")
     print(r.json())
     assert r.status_code == 200
 
