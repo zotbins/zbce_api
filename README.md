@@ -9,18 +9,18 @@ This is a proof-of-concept API repository that allows users to store waste relat
 
 # 📔 Table of Contents
 - [ZBCE API](#zbce-api)
-- [📔 Table of Contents](#---table-of-contents)
-- [📰 Deployment](#---deployment)
+- [📔 Table of Contents](#-table-of-contents)
+- [📰 Deployment](#-deployment)
     + [Prerequisites](#prerequisites)
     + [Deployment Guides](#deployment-guides)
-- [🔨 Development](#---development)
+- [🔨 Development](#-development)
     + [Cloning ZBCE Repository](#cloning-zbce-repository)
     + [Setting up Python](#setting-up-python)
     + [Installing MySQL](#installing-mysql)
     + [Creating a '.env' file](#creating-a--env--file)
     + [Creating Tables in Database](#creating-tables-in-database)
     + [Running the Server](#running-the-server)
-
+- [Contributing](#contributing)
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
 # 📰 Deployment

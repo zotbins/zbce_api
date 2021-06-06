@@ -3,17 +3,17 @@
 There are multiple deployment options listed below. If you feel that there is a alternative deployment option that you would like to share feel free to make a pull request!
 
 # Table of Contents
-- [💡 LAMP Server Deployment](#---lamp-server-deployment)
+- [💡 LAMP Server Deployment](#-lamp-server-deployment)
   * [1 - Setting up the LAMP Server](#1---setting-up-the-lamp-server)
       - [Linux](#linux)
       - [Apache](#apache)
       - [MySQL](#mysql)
       - [Python](#python)
-    + [FTP (Optional but Recommended)](#ftp--optional-but-recommended-)
+    + [FTP (Optional but Recommended)](#ftp-optional-but-recommended-)
   * [2 - Git Clone and Setting up the Environment](#2---git-clone-and-setting-up-the-environment)
-  * [3 - Create a `.env` File](#3---create-a--env--file)
+  * [3 - Create a `.env` File](#3---create-a-env-file)
   * [4 - Testing the Server](#4---testing-the-server)
-- [🐪 LUMP Server Deployment](#---lump-server-deployment)
+- [🐪 LUMP Server Deployment](#-lump-server-deployment)
 - [PythonAnywhere deployment](#pythonanywhere-deployment)
     + [1. Create a new Web app](#1-create-a-new-web-app)
   * [2. Git Clone and Setting Up the Environment](#2-git-clone-and-setting-up-the-environment)
