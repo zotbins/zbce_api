@@ -8,7 +8,6 @@ from models import db
 
 
 def recreate_tables():
-    """ """
     print("Dropping all tables in specified database...")
     db.drop_all()
     print("Dropped.")

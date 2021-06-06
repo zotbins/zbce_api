@@ -10,12 +10,20 @@
 import datetime, time
 import json
 import requests
+import os
+from pathlib import Path
+from dotenv import load_dotenv
 
 # local imports
 import create_tables
 
+# load environment variables
+dirname = os.path.dirname(__file__)
+dotenv_path = Path(os.path.join(dirname, ".env"))
+load_dotenv(dotenv_path=dotenv_path)
+
 # global variables
-BASEURL = "http://127.0.0.1"  # replace with your own base URL
+BASEURL = os.getenv("BASE_URL")  # replace with your own base URL
 IPADDRESS = "127.0.0.1"  # replace with your own IP Address you are testing with
 HEADERS = {"Content-Type": "application/json", "Accept": "application/json"}
 
