@@ -2,16 +2,18 @@
 
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
-Thank you to everyone who contributed :)
+This is a proof-of-concept API repository that allows users to store waste related metrics such as bin fullness, waste weight, bin usage, and waste images. Thank you to everyone who contributed! 🙌
 
 ![GitHub Contributors Image](https://contrib.rocks/image?repo=zotbins/zbce_api)
 
 
-# Table of Contents
-- [Deployment](#deployment)
-  * [Prerequisites](#prerequisites)
-  * [Deployment Guides](#deployment-guides)
-- [Development](#development)
+# 📔 Table of Contents
+- [ZBCE API](#zbce-api)
+- [📔 Table of Contents](#---table-of-contents)
+- [📰 Deployment](#---deployment)
+    + [Prerequisites](#prerequisites)
+    + [Deployment Guides](#deployment-guides)
+- [🔨 Development](#---development)
     + [Cloning ZBCE Repository](#cloning-zbce-repository)
     + [Setting up Python](#setting-up-python)
     + [Installing MySQL](#installing-mysql)
@@ -21,25 +23,25 @@ Thank you to everyone who contributed :)
 
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
-# Deployment
+# 📰 Deployment
 If you have the Prerequisites listed below you can fully deploy this project. Since we use an ORM (Object-relational Mapping), you can use different SQL databases such as PostgreSQL or MySQL. If you only wish to just work on a development version, please refer to the [Development](#development) section below.
 
-## Prerequisites
+### Prerequisites
 - [Ubuntu 20.04 Operating System](https://ubuntu.com/)
     - other versions might be alright, but have not been tested
 - Basic understanding of the Linux Command Line
 
-## Deployment Guides
+### Deployment Guides
 
-If you're ready to deploy please follow this deployment guide:
+If you're ready to deploy please follow this [deployment guide]().
 
-The deployment guide has instructions for the following:
+The [deployment guide]() has instructions for the following:
 
 - Self-Hosted LAMP (Linux, Apache, MySQL, Python)
 - Self-Hosted LUMP (Linux, Uvicorn, PostgreSQL, Python)
--
+- PythonAnywhere Deployment
 
-# Development
+# 🔨 Development
 This section is for setting up the development environment only, which takes less steps and does not require Ubuntu. However, development should not be used in a production environment. For a more deployed solution, please refer to the [Deployment](#deployment) section above.  
 
 This is the basic outline for setting up your development environment:
@@ -91,7 +93,7 @@ Once MySQL is installed (workbench and server), you will have to connect to the 
 ### Creating a '.env' file
 1. Create an .env file in the same directory
 2. Input this into the .env file and change the parameters to match your username and password
-    ```
+    ```bash
     # change this to specify your MySQL Database
     SQLALCHEMY_DATABASE_URI=mysql+pymysql://YOUR_MYSQL_USERNAME_HERE:YOUR_MYSQL_PASSWORD_HERE@localhost/zotbinsCE
 
@@ -114,3 +116,17 @@ Once MySQL is installed (workbench and server), you will have to connect to the 
 3. Use Postman for further tests if desired
 
 Congratulations you successfully set up your development environment! 🥳
+
+# Contributing
+
+Here are some following ways you can contribute:
+
+- Make a pull request!
+- Join our [Discord](https://discord.gg/mGKVVpxTPr) server and contribute to our growing community
+- Submit bugs by opening an issue on our [Github](https://github.com/zotbins). Please make sure that bugs are reported in detail and is reproducible.
+- Write some documentation for a repository and we can add it to our GitHub Wiki Page
+- Look for open issues on our repositories
+- Suggest new features in our Discord Server
+- Contribute to our crowd-sourcing projects. Occasionally, we will have certain projects that require crowd-sourced data, and would love people to help.
+- Submit user feedback through feedback forms or polls in our Discord community
+- Lookout for more requests for help on our Discord server
