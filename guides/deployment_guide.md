@@ -2,6 +2,27 @@
 
 There are multiple deployment options listed below. If you feel that there is a alternative deployment option that you would like to share feel free to make a pull request!
 
+# Table of Contents
+- [💡 LAMP Server Deployment](#---lamp-server-deployment)
+  * [1 - Setting up the LAMP Server](#1---setting-up-the-lamp-server)
+      - [Linux](#linux)
+      - [Apache](#apache)
+      - [MySQL](#mysql)
+      - [Python](#python)
+    + [FTP (Optional but Recommended)](#ftp--optional-but-recommended-)
+  * [2 - Git Clone and Setting up the Environment](#2---git-clone-and-setting-up-the-environment)
+  * [3 - Create a `.env` File](#3---create-a--env--file)
+  * [4 - Testing the Server](#4---testing-the-server)
+- [🐪 LUMP Server Deployment](#---lump-server-deployment)
+- [PythonAnywhere deployment](#pythonanywhere-deployment)
+    + [1. Create a new Web app](#1-create-a-new-web-app)
+  * [2. Git Clone and Setting Up the Environment](#2-git-clone-and-setting-up-the-environment)
+  * [3. Create a .env Environment](#3-create-a-env-environment)
+  * [4. Verify that Everything Works](#4-verify-that-everything-works)
+
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
+
 # 💡 LAMP Server Deployment
 
 My instructions are based off of Tanner Crook's Blog, which is really well-written. If you would like more detail for any of the steps I don't explain well just follow his instructions here: [LAMP Stack with Flask](https://db.tannercrook.com/cit-225/lamp-stack-with-flask/). You can use PostgreSQL instead of MYSQL if you want.
