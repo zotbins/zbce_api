@@ -33,9 +33,9 @@ If you have the Prerequisites listed below you can fully deploy this project. Si
 
 ### Deployment Guides
 
-If you're ready to deploy please follow this [deployment guide]().
+If you're ready to deploy please follow this [deployment guide](https://github.com/zotbins/zbce_api/blob/formatted/guides/deployment_guide.md).
 
-The [deployment guide]() has instructions for the following:
+The [deployment guide](https://github.com/zotbins/zbce_api/blob/formatted/guides/deployment_guide.md) has instructions for the following:
 
 - Self-Hosted LAMP (Linux, Apache, MySQL, Python)
 - Self-Hosted LUMP (Linux, Uvicorn, PostgreSQL, Python)

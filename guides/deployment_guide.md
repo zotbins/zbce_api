@@ -173,9 +173,6 @@ This solution stack uses Linux, Uvicorn, MySQL (or you could use PostgreSQL), an
    ![image-20210605123611724](https://raw.githubusercontent.com/zotbins/zbce_api/formatted/guides/deployment_guide.assets/image-20210605123611724.png)
 
 
-
-
-
    ## 2. Git Clone and Setting Up the Environment
 
    1. Go to **Consoles** and create a new **Bash** Console
