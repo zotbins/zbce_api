@@ -148,29 +148,29 @@ This solution stack uses Linux, Uvicorn, MySQL (or you could use PostgreSQL), an
 
 1. Make a [PythonAnywhere](https://www.pythonanywhere.com/) account and log in
 
-   ![image-20210605122936959](https://raw.githubusercontent.com/zotbins/zbce_api/formatted\guides\deployment_guide.assets\image-20210605122936959.png)
+   ![image-20210605122936959](https://raw.githubusercontent.com/zotbins/zbce_api/formatted/guides/deployment_guide.assets/image-20210605122936959.png)
 
 2. On the dashboard click **Open Web tab** on the middle right to navigate to the Web tab.
 
 3. Click on **Add a new web app**  near the top left in the Web tab.
 
-   ![image-20210605123116664](https://raw.githubusercontent.com/zotbins/zbce_api/formatted\guides\deployment_guide.assets\image-20210605123116664.png)
+   ![image-20210605123116664](https://raw.githubusercontent.com/zotbins/zbce_api/formatted/guides/deployment_guide.assets/image-20210605123116664.png)
 
 4. Click **Next**.
 
-   ![image-20210605123329199](https://raw.githubusercontent.com/zotbins/zbce_api/formatted\guides\deployment_guide.assets\image-20210605123329199.png)
+   ![image-20210605123329199](https://raw.githubusercontent.com/zotbins/zbce_api/formatted/guides/deployment_guide.assets/image-20210605123329199.png)
 
 5. Click on **Manual configuration**
 
-   ![image-20210605123438967](https://raw.githubusercontent.com/zotbins/zbce_api/formatted\guides\deployment_guide.assets\image-20210605123438967.png)
+   ![image-20210605123438967](https://raw.githubusercontent.com/zotbins/zbce_api/formatted/guides/deployment_guide.assets/image-20210605123438967.png)
 
 6. Select **Python3.8** and then click **Next**
 
-   ![image-20210605123515704](https://raw.githubusercontent.com/zotbins/zbce_api/formatted\guides\deployment_guide.assets\image-20210605123515704.png)
+   ![image-20210605123515704](https://raw.githubusercontent.com/zotbins/zbce_api/formatted/guides/deployment_guide.assets/image-20210605123515704.png)
 
 7. Nice! Your web app should now be setup.
 
-   ![image-20210605123611724](https://raw.githubusercontent.com/zotbins/zbce_api/formatted\guides\deployment_guide.assets\image-20210605123611724.png)
+   ![image-20210605123611724](https://raw.githubusercontent.com/zotbins/zbce_api/formatted/guides/deployment_guide.assets/image-20210605123611724.png)
 
 
 
@@ -180,7 +180,7 @@ This solution stack uses Linux, Uvicorn, MySQL (or you could use PostgreSQL), an
 
    1. Go to **Consoles** and create a new **Bash** Console
 
-      ![image-20210605124254142](https://raw.githubusercontent.com/zotbins/zbce_api/formatted\guides\deployment_guide.assets\image-20210605124254142.png)
+      ![image-20210605124254142](https://raw.githubusercontent.com/zotbins/zbce_api/formatted/guides/deployment_guide.assets/image-20210605124254142.png)
 
    2. In your bash terminal do a git clone and change directory.
 
@@ -208,7 +208,7 @@ This solution stack uses Linux, Uvicorn, MySQL (or you could use PostgreSQL), an
 
    1. Find your MySQL database information in the **Databases** tab near the top right. Try to set a password for it.
 
-      ![image-20210605131953424](https://raw.githubusercontent.com/zotbins/zbce_api/formatted\guides\deployment_guide.assets\image-20210605131953424.png)
+      ![image-20210605131953424](https://raw.githubusercontent.com/zotbins/zbce_api/formatted/guides/deployment_guide.assets/image-20210605131953424.png)
 
    3. Create your .env file
 
@@ -245,7 +245,7 @@ This solution stack uses Linux, Uvicorn, MySQL (or you could use PostgreSQL), an
 
    8. Edit the **WSGI configuration file** by clicking on the hyperlink next to it.
 
-      ![image-20210605180326774](https://raw.githubusercontent.com/zotbins/zbce_api/formatted\guides\deployment_guide.assets\image-20210605180326774.png)
+      ![image-20210605180326774](https://raw.githubusercontent.com/zotbins/zbce_api/formatted/guides/deployment_guide.assets/image-20210605180326774.png)
 
    9. Delete everything in the wsgi.py file and include the following lines. Make to include your PythonAnywhere username in place of `<YOUR_USERNAME`and your hard to guess string that you used in the `.env` file in place of `<YOUR_HARD_TO_GUESS_STRING>`.
 
