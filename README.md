@@ -1,105 +1,98 @@
 # ZBCE API
 
-# Prerequisites:
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
+This is a proof-of-concept API repository that allows users to store waste related metrics such as bin fullness, waste weight, bin usage, and waste images. Thank you to everyone who contributed! 🙌
+
+![GitHub Contributors Image](https://contrib.rocks/image?repo=zotbins/zbce_api)
+
+
+# 📔 Table of Contents
+- [ZBCE API](#zbce-api)
+- [📔 Table of Contents](#-table-of-contents)
+- [📰 Deployment](#-deployment)
+    + [Prerequisites](#prerequisites)
+    + [Deployment Guides](#deployment-guides)
+- [🔨 Development](#-development)
+    + [Cloning ZBCE Repository](#cloning-zbce-repository)
+    + [Setting up Python](#setting-up-python)
+    + [Installing MySQL](#installing-mysql)
+    + [Creating a '.env' file](#creating-a--env--file)
+    + [Creating Tables in Database](#creating-tables-in-database)
+    + [Running the Server](#running-the-server)
+- [Contributing](#contributing)
+<small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
+
+# 📰 Deployment
+If you have the Prerequisites listed below you can fully deploy this project. Since we use an ORM (Object-relational Mapping), you can use different SQL databases such as PostgreSQL or MySQL. If you only wish to just work on a development version, please refer to the [Development](#development) section below.
+
+### Prerequisites
 - [Ubuntu 20.04 Operating System](https://ubuntu.com/)
     - other versions might be alright, but have not been tested
 - Basic understanding of the Linux Command Line
 
-# Getting Started
-These are the basic steps to get started:
-1. Setting up the LAMP Server
-2. Installing MySQL
-3. Git Clone and Setup
-4. Create a `.env` File
-5. Testing the Server
+### Deployment Guides
 
-My instructions are based off of Tanner Crook's Blog, which is really well-written. If you would like more detail for any of the steps I don't explain well just follow his instructions here: [LAMP Stack with Flask](https://db.tannercrook.com/cit-225/lamp-stack-with-flask/)
+If you're ready to deploy please follow this [deployment guide](https://github.com/zotbins/zbce_api/blob/formatted/guides/deployment_guide.md).
 
-## 1 - Setting up the LAMP Server
-#### Linux
-Make sure your server is up to date by running the following commands
-```
-sudo apt update
-sudo apt upgrade
-```
-#### Apache
-```
-sudo apt install apache2
-```
+The [deployment guide](https://github.com/zotbins/zbce_api/blob/formatted/guides/deployment_guide.md) has instructions for the following:
 
-#### MySQL
-Follow these instructions if you would like more detail: [How to Install MySQl on Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-20-04)
+- Self-Hosted LAMP (Linux, Apache, MySQL, Python)
+- Self-Hosted LUMP (Linux, Uvicorn, PostgreSQL, Python)
+- PythonAnywhere Deployment
 
-1. `sudo apt update`
-2. `sudo apt install mysql-server`
-3. `sudo mysql_secure_installation`
-4. Set password for root user from the step above
-5. Create a dedicated MySQL User and Grant Privileges using the steps below.
-6. `sudo mysql`
-7. In the MySQL console run the following commands:
-    ```sql
-    CREATE USER 'YOURUSERNAME'@'localhost' IDENTIFIED BY 'YOURPASSWORD';
-    ```
-8. Now grant your permissions
-    ```sql
-    GRANT CREATE, ALTER, DROP, INSERT, UPDATE, DELETE, SELECT, REFERENCES, RELOAD on *.* TO 'YOURUSERNAME'@'localhost' WITH GRANT OPTION;
-    ```
-9. You can now log in with your new user and password `mysql -u u YOURUSERNAME -p`
-10. Create your database using the SQL command: `CREATE DATABASE zotbinsCE`;
-11. Exit the MySQL shell: `exit`
-11. Remember your username and password 😉
+# 🔨 Development
+This section is for setting up the development environment only, which takes less steps and does not require Ubuntu. However, development should not be used in a production environment. For a more deployed solution, please refer to the [Deployment](#deployment) section above.  
 
-#### Python
-```
-sudo apt install python3
-sudo apt install python3-venv
-sudo apt install python3-pip
-```
+This is the basic outline for setting up your development environment:
+1. Cloning Repo in Workspace
+2. Setting up Python
+3. Installing MySQL
+4. Creating a '.env' file
+5. Creating Tables in Database
+6. Running the Server
 
-### FTP (Optional but Recommended)
-This step is optional, but is recommended for transferring files to or from the server.
-```
-sudo apt install vsftpd
-sudo nano /etc/vsftpd.conf
-```
-uncomment the line: `write_enable=YES`
+### Cloning ZBCE Repository
+Following the instructions listed, you will be able to clone the ZBCE Repository; however, if you would like a more thorough guide/step-by-step, visit the GitHub Docs guide for cloning a repository: https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository.
 
-```
-sudo service vsftpd restart
-```
+1. Open an empty folder (or the folder you would like to clone the repo into) and navigate to that folder using a terminal
+2. In your terminal, type in `git clone` add a space then paste https://github.com/zotbins/zbce_api.git (Note: you can also find the repo's HTTP URL yourself by clicking the green "Code" button on the top right corner of the ZBCE repo)
+3. Run the command
 
-## 3 - Git Clone and Setting up the Environment
-*Following these instructions will be more convenient if you are in superuser mode `su`*
+After these steps, you should be able to access the ZBCE repo from your computer.
 
-1. Follow these instructions to set up your Apache and WSGI Configuration: [https://db.tannercrook.com/building-a-flask-foundation/](https://db.tannercrook.com/building-a-flask-foundation/)
-2. After the step above you should have a working LAMP Stack w/ Flask
-3. Now we're going to clone the ZBCE API. So we need to replace the app folder with the repository we are cloning by running the following:
-    ```bash
-    mv /var/www/app/app /var/www/app/app.bak
-    cd /var/www/app
-    git clone https://github.com/zotbins/zbce_api
-    mv zbce_api app
-    ```
-4. Now build the virtual environment.
-    ```bash
-    cd app
-    python3 -m venv venv
-    source venv/bin/activate
-    pip3 install -r requirements.txt  
-    ```
-5. Create a folder for uploading your images and change the permissions.
-    ```bash
-    cd /var/www/app/app
-    mkdir YOUR_UPLOAD_FOLDER_NAME
-    chmod 777 YOUR_UPLOAD_FOLDER_NAME
-    ```
+### Setting up Python
+1. Download the appropriate Python version for your OS from https://www.python.org/downloads/
+2. Unzip the python file and follow the Python's setup instructions given
 
-## 4 - Create a `.env` File
-Now that you have the stack setup and your repository and your virtual environment. You want to create a `.env` file with the editor program of your choice or just use nano. This will allow you to store some variables that are supposed to be a secret like passwords, or usernames, etc. We will be using a `.env` to also store sensitive information.
+Once Python is downloaded on your device, you will need to create a virtual environment. For a more in depth explanation of creating a virtual Python environment, visit https://docs.python.org/3/tutorial/venv.html
 
-0. In the project directory run: `sudo nano .env`
-1. Add the following lines and replace the following portions as specified
+1. In your terminal type and run `python3 -m venv venv`
+2. Activate the virtual environment
+   For Windows type and run `venv\Scripts\activate.bat`
+   For MacOS or Linux type and run `source venv/bin/activate`
+3. Install packages within the virtual environment with `pip install -r requirements.txt`
 
+### Installing MySQL
+1. Download the MySQL workbench and server DB for your OS using https://dev.mysql.com/downloads/workbench/
+2. Unzip the msi files and follow the setup instructions as given
+
+Once MySQL is installed (workbench and server), you will have to connect to the ZBCE Database.
+1. Open MySQL and ‘Start MySQL Server’
+2. Open MySQLWorkbench
+3. Create a new MySQL Connection
+   Connection Name: zotbinsCE
+   Hostname: 127.0.0.1
+   Port: 3306
+   Username: root
+   Hit ok and connect to this server
+4. Create a new SQL tab:
+5. Run this query once to create the database (click on lightning bolt to run):
+   CREATE DATABASE zotbinsCE;
+
+### Creating a '.env' file
+1. Create an .env file in the same directory
+2. Input this into the .env file and change the parameters to match your username and password
     ```bash
     # change this to specify your MySQL Database
     SQLALCHEMY_DATABASE_URI=mysql+pymysql://YOUR_MYSQL_USERNAME_HERE:YOUR_MYSQL_PASSWORD_HERE@localhost/zotbinsCE
@@ -111,22 +104,29 @@ Now that you have the stack setup and your repository and your virtual environme
     # for your upload folder make sure you change the permissions so anyone can modify it using `chmod 777`
     UPLOAD_FOLDER=YOUR_UPLOAD_FOLDER_PATH
     ```
-2. Close and save the file.
-3. In `config.py` Turn off or turn on Debugging options. You should turn off debugging, when you want your server to run in production mode: `app.config['DEBUG'] = True # turn this off when not debugging.`
+3. Save your changes
 
-## 5 - Testing the Server
-Alright, everything should be set now!
-1. Reboot your server: `reboot`
-2. Open the `unit_tests.py` file and change the following:
-    ```
-    BASEURL = "YOUR_URL"
-    IPADDRESS = "YOUR_IP_ADDRESS"
-    ```
-3. Save and close the file
-4. Run the unit tests
-    ```
-    su
-    cd /var/www/app/app
-    pytest -q unit_tests.py
-    ```
-5. If there are no error messages everything should be good!
+### Creating Tables in Database
+1. Create the tables in your database by running `python create_tables.py`
+2. If set up successfully, you should see new tables added in mySQL Workbench
+
+### Running the Server
+1. Type and run `python app.py` into your terminal
+2. Check where to access your API by looking at “Running on” section on the command line
+3. Use Postman for further tests if desired
+
+Congratulations you successfully set up your development environment! 🥳
+
+# Contributing
+
+Here are some following ways you can contribute:
+
+- Make a pull request!
+- Join our [Discord](https://discord.gg/mGKVVpxTPr) server and contribute to our growing community
+- Submit bugs by opening an issue on our [Github](https://github.com/zotbins). Please make sure that bugs are reported in detail and is reproducible.
+- Write some documentation for a repository and we can add it to our GitHub Wiki Page
+- Look for open issues on our repositories
+- Suggest new features in our Discord Server
+- Contribute to our crowd-sourcing projects. Occasionally, we will have certain projects that require crowd-sourced data, and would love people to help.
+- Submit user feedback through feedback forms or polls in our Discord community
+- Lookout for more requests for help on our Discord server
