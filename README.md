@@ -103,6 +103,9 @@ Once MySQL is installed (workbench and server), you will have to connect to the 
     # change this to specify where you want the image files to be uploaded to
     # for your upload folder make sure you change the permissions so anyone can modify it using `chmod 777`
     UPLOAD_FOLDER=YOUR_UPLOAD_FOLDER_PATH
+
+    # this is the base url used for the unit tests
+    BASE_URL="http://127.0.0.1"
     ```
 3. Save your changes
 
