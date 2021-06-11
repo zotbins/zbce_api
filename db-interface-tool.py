@@ -64,7 +64,5 @@ def post_bin_info(ip_address, bin_height, location, bin_type, waste_metrics):
     assert r.status_code == 201
 
 
-#
-
 if __name__ == "__main__":
     main()
