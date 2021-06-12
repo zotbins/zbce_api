@@ -1,6 +1,19 @@
-# import create_tables
+import create_tables
 import textwrap
+import requests
+from pathlib import Path
+from dotenv import load_dotenv
+import os
+import json
 
+# load environment variables
+dirname = os.path.dirname(__file__)
+dotenv_path = Path(os.path.join(dirname, ".env"))
+load_dotenv(dotenv_path=dotenv_path)
+
+# global variables
+BASEURL = os.getenv("BASE_URL")  # replace with your own base URL
+HEADERS = {"Content-Type": "application/json", "Accept": "application/json"} 
 
 def main():
     # setup tables
@@ -49,11 +62,11 @@ def post_bin_info(ip_address, bin_height, location, bin_type, waste_metrics):
     postRequest = {
         "data": [
             {
-                "ip_address": "{}",
-                "bin_height": {},
-                "location": "{}",
-                "bin_type": "{}",
-                "waste_metrics": "{}",
+                "ip_address": "{}".format(ip_address),
+                "bin_height": bin_height,
+                "location": "{}".format(location),
+                "bin_type": "{}".format(bin_type),
+                "waste_metrics": "{}".format(waste_metrics),
             }
         ]
     }
