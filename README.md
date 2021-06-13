@@ -20,7 +20,8 @@ This is a proof-of-concept API repository that allows users to store waste relat
     + [Creating a '.env' file](#creating-a--env--file)
     + [Creating Tables in Database](#creating-tables-in-database)
     + [Running the Server](#running-the-server)
-- [Contributing](#contributing)
+- [📚 Database Interface Tool](#-database-interface-tool)
+- [🤝 Contributing](#-contributing)
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
 # 📰 Deployment
@@ -120,7 +121,24 @@ Once MySQL is installed (workbench and server), you will have to connect to the 
 
 Congratulations you successfully set up your development environment! 🥳
 
-# Contributing
+# 📚 Database Interface Tool
+
+The database interface tool is the python file called `db_interface_tool.py` that lets users interact with a simple command line interface to drop and recreate tables. It also lets users add bins to the Bin Info table in the database as seen in the database schema image below.
+
+![Database Schema](https://user-images.githubusercontent.com/33404602/104277024-ef173f00-545a-11eb-8776-26567a18be8c.png)
+
+Run the script to use the tool:
+
+```bash
+# You need to make sure that either your development or deployment environment is already setup
+# make sure you activate your virtual environment first
+source venv/bin/activate
+
+# run script
+python db_interface_tool.py
+```
+
+# 🤝 Contributing
 
 Here are some following ways you can contribute:
 
