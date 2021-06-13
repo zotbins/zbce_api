@@ -131,7 +131,7 @@ Now that you have the stack setup and your repository and your virtual environme
     UPLOAD_FOLDER=YOUR_UPLOAD_FOLDER_PATH
 
     # this is the base url used for the unit tests
-    BASE_URL="http://127.0.0.1"
+    BASE_URL="http://127.0.0.1" # replace with your server name
     ```
 2. Close and save the file.
 3. In `config.py` Turn off or turn on Debugging options. You should turn off debugging, when you want your server to run in production mode: `app.config['DEBUG'] = True # turn this off when not debugging.`

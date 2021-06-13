@@ -24,7 +24,7 @@ This is a proof-of-concept API repository that allows users to store waste relat
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
 # 📰 Deployment
-If you have the Prerequisites listed below you can fully deploy this project. Since we use an ORM (Object-relational Mapping), you can use different SQL databases such as PostgreSQL or MySQL. If you only wish to just work on a development version, please refer to the [Development](#development) section below.
+If you have the Prerequisites listed below you can fully deploy this project. Since we use an ORM (Object-relational Mapping), you can use different SQL databases such as PostgreSQL or MySQL. If you only wish to just work on a development version, please refer to the [Development](#-development) section below.
 
 ### Prerequisites
 - [Ubuntu 20.04 Operating System](https://ubuntu.com/)
@@ -42,7 +42,7 @@ The [deployment guide](https://github.com/zotbins/zbce_api/blob/formatted/guides
 - PythonAnywhere Deployment
 
 # 🔨 Development
-This section is for setting up the development environment only, which takes less steps and does not require Ubuntu. However, development should not be used in a production environment. For a more deployed solution, please refer to the [Deployment](#deployment) section above.  
+This section is for setting up the development environment only, which takes less steps and does not require Ubuntu. However, development should not be used in a production environment. For a more deployed solution, please refer to the [Deployment](#-deployment) section above.  
 
 This is the basic outline for setting up your development environment:
 1. Cloning Repo in Workspace
@@ -103,6 +103,9 @@ Once MySQL is installed (workbench and server), you will have to connect to the 
     # change this to specify where you want the image files to be uploaded to
     # for your upload folder make sure you change the permissions so anyone can modify it using `chmod 777`
     UPLOAD_FOLDER=YOUR_UPLOAD_FOLDER_PATH
+
+    # this is the base url used for the unit tests
+    BASE_URL="http://127.0.0.1" # replace with your server name
     ```
 3. Save your changes
 
