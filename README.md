@@ -22,6 +22,7 @@ This is a proof-of-concept API repository that allows users to store waste relat
     + [Running the Server](#running-the-server)
 - [📚 Database Interface Tool](#-database-interface-tool)
 - [🤝 Contributing](#-contributing)
+
 <small><i><a href='http://ecotrust-canada.github.io/markdown-toc/'>Table of contents generated with markdown-toc</a></i></small>
 
 # 📰 Deployment
