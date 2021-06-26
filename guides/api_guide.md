@@ -5,12 +5,13 @@
 | 1   | POST/GET | /bin-info      |
 | 2   | GET      | /bin-info-all  |
 | 3   | POST/GET | /weight       |
-| 4   | GET      | /weight-all   |
+| 4   | GET      | /weight-today   |
 | 5   | POST/GET | /fullness     |
-| 6   | GET      | /fullness-all |
+| 6   | GET      | /fullness-today |
 | 7   | POST/GET | /usage        |
-| 8   | GET      | /usage-all    |
+| 8   | GET      | /usage-today    |
 | 9   | POST/GET | /image        |
+| 10  | GET      | /metric-csv
 
 
 ## /bininfo
@@ -143,7 +144,7 @@
 >}
 > ```
 
-## /weight-all
+## /weight-today
 
 #### GET:
 
@@ -151,13 +152,13 @@
 >
 > ```python
 >import requests
->r = requests.get(url="http://127.0.0.1/weight-all")
+>r = requests.get(url="http://127.0.0.1/weight-today")
 >print(r.json)
 >assert(r.status_code == 200)
 > ```
 > **Request Example (curl)**:
 > ```bash
->curl http:127.0.0.1/weight-all
+>curl http:127.0.0.1/weight-today
 >```
 > **Response Example**:
 > ```json
@@ -244,13 +245,13 @@ If start timestamp is greater than the end timestamp provided, a 400 error is th
 >  ]
 >}
 >```
-## fullness-all
+## fullness-today
 
-**GET:**
+#### GET:
 > **Request Example (Python)**
 > ```python
 >import requests
->r = requests.get(url="http://127.0.0.1/fullness-all")
+>r = requests.get(url="http://127.0.0.1/fullness-today")
 >print(r.json)
 >assert(r.status_code == 200)
 >```
@@ -269,7 +270,7 @@ If start timestamp is greater than the end timestamp provided, a 400 error is th
 
 ## /usage
 
-**POST:**
+#### POST:
 
 > **Body Example:**
 > ```json
@@ -329,7 +330,7 @@ If start timestamp is greater than the end timestamp provided, a 400 error is th
 >  ]
 >}
 > ```
-## usage-all
+## /usage-today
 
 #### GET:
 
@@ -337,14 +338,14 @@ If start timestamp is greater than the end timestamp provided, a 400 error is th
 >
 > ```python
 >import requests
->r = requests.get(url="http://127.0.0.1/usage-all")
+>r = requests.get(url="http://127.0.0.1/usage-today")
 >print(r.json)
 >assert(r.status_code == 200)
 > ```
 > **Request Example (curl):**
 >
 > ```bash
->curl 'http://127.0.0.1/usage-all'
+>curl 'http://127.0.0.1/usage-today'
 >```
 > **Response Example**
 > ```json
@@ -357,3 +358,13 @@ If start timestamp is greater than the end timestamp provided, a 400 error is th
 >  ]
 >}
 > ```
+
+## /metric-csv
+
+#### GET:
+
+> **Request Example (curl)
+>
+> ```bash
+>curl 'http://127.0.0.1/metric-csv?metric=fullness&start_timestamp=2015-11-04%2015:06:25&end_timestamp=2021-04-1%2015:06:25'
+>```
