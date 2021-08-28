@@ -1,0 +1,350 @@
+<h1 id="zotbins-community-edition-api-s">ZotBins Community Edition API&#39;s</h1>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">#</th>
+<th style="text-align:left">Method</th>
+<th style="text-align:left">Endpoint</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">1</td>
+<td style="text-align:left">POST/GET</td>
+<td style="text-align:left">/bin-info</td>
+</tr>
+<tr>
+<td style="text-align:left">2</td>
+<td style="text-align:left">GET</td>
+<td style="text-align:left">/bin-info-all</td>
+</tr>
+<tr>
+<td style="text-align:left">3</td>
+<td style="text-align:left">POST/GET</td>
+<td style="text-align:left">/weight</td>
+</tr>
+<tr>
+<td style="text-align:left">4</td>
+<td style="text-align:left">GET</td>
+<td style="text-align:left">/weight-today</td>
+</tr>
+<tr>
+<td style="text-align:left">5</td>
+<td style="text-align:left">POST/GET</td>
+<td style="text-align:left">/fullness</td>
+</tr>
+<tr>
+<td style="text-align:left">6</td>
+<td style="text-align:left">GET</td>
+<td style="text-align:left">/fullness-today</td>
+</tr>
+<tr>
+<td style="text-align:left">7</td>
+<td style="text-align:left">POST/GET</td>
+<td style="text-align:left">/usage</td>
+</tr>
+<tr>
+<td style="text-align:left">8</td>
+<td style="text-align:left">GET</td>
+<td style="text-align:left">/usage-today</td>
+</tr>
+<tr>
+<td style="text-align:left">9</td>
+<td style="text-align:left">POST/GET</td>
+<td style="text-align:left">/image</td>
+</tr>
+<tr>
+<td style="text-align:left">10</td>
+<td style="text-align:left">GET</td>
+<td style="text-align:left">/metric-csv</td>
+</tr>
+</tbody>
+</table>
+<h2 id="-bininfo">/bininfo</h2>
+<h4 id="post-">POST:</h4>
+<blockquote>
+<p><strong>Body Example:</strong></p>
+<pre><code class="lang-json">{
+   <span class="hljs-attr">"data"</span>: [
+       {
+           <span class="hljs-attr">"ip_address"</span>: <span class="hljs-string">"127.0.0.1"</span>,
+           <span class="hljs-attr">"bin_height"</span>: <span class="hljs-number">50</span>,
+           <span class="hljs-attr">"location"</span>: <span class="hljs-string">"kitchen1"</span>,
+           <span class="hljs-attr">"bin_type"</span>: <span class="hljs-string">"R"</span>,
+           <span class="hljs-attr">"waste_metrics"</span>: <span class="hljs-string">"FP"</span>
+       }
+   ]
+}
+</code></pre>
+<p><strong>Request Example (Python):</strong></p>
+<pre><code class="lang-python">import requests
+postRequest = {<span class="hljs-string">"data"</span>:[{<span class="hljs-string">"ip_address"</span>:<span class="hljs-number">127.0</span>.<span class="hljs-number">0.1</span>,<span class="hljs-string">"bin_height"</span>:<span class="hljs-number">50</span>,<span class="hljs-string">"location"</span>:<span class="hljs-string">"kitchen1"</span>,<span class="hljs-string">"bin_type"</span>:<span class="hljs-string">"R"</span>,<span class="hljs-string">"waste_metrics"</span>:<span class="hljs-string">"FP"</span>}]}
+r = requests.post(<span class="hljs-string">"http:127.0.0.1/bininfo"</span>, data=json.dumps(postRequest),headers={<span class="hljs-string">"Content-Type"</span>: <span class="hljs-string">"application/json"</span>,<span class="hljs-string">"Accept"</span>: <span class="hljs-string">"application/json"</span>})
+<span class="hljs-function"><span class="hljs-title">print</span><span class="hljs-params">(r.content)</span></span>
+<span class="hljs-function"><span class="hljs-title">assert</span><span class="hljs-params">(r.status_code == <span class="hljs-number">201</span>)</span></span>
+</code></pre>
+</blockquote>
+<h4 id="get-in-progress-">GET [In-Progress]:</h4>
+<blockquote>
+<p><strong>Body Example:</strong></p>
+<pre><code class="lang-json">{<span class="hljs-attr">"bin-id"</span>:<span class="hljs-number">1</span>}
+</code></pre>
+</blockquote>
+<h2 id="-bininfo-all">/bininfo-all</h2>
+<h4 id="get-">GET:</h4>
+<blockquote>
+<p><strong>Request Example (Python)</strong>:</p>
+<pre><code class="lang-python">import requests
+r = requests.get(url=<span class="hljs-string">"http://127.0.0.1/bininfo-all"</span>)
+<span class="hljs-function"><span class="hljs-title">print</span><span class="hljs-params">(r.json()</span></span>)
+<span class="hljs-function"><span class="hljs-title">assert</span><span class="hljs-params">(r.status_code == <span class="hljs-number">200</span>)</span></span>
+</code></pre>
+<p><strong>Request Example (curl)</strong>:</p>
+<pre><code class="lang-bash">curl <span class="hljs-string">http:</span><span class="hljs-comment">//127.0.0.1/bininfo-all</span>
+</code></pre>
+<p><strong>Response Example</strong></p>
+<pre><code class="lang-json">{
+ <span class="hljs-attr">"data"</span>: [
+   {
+     <span class="hljs-attr">"bin_height"</span>: <span class="hljs-number">50</span>,
+     <span class="hljs-attr">"bin_type"</span>: <span class="hljs-string">"R"</span>,
+     <span class="hljs-attr">"id"</span>: <span class="hljs-number">1</span>,
+     <span class="hljs-attr">"ip_address"</span>: <span class="hljs-string">"127.0.0.1"</span>,
+     <span class="hljs-attr">"location"</span>: <span class="hljs-string">"kitchen1"</span>,
+     <span class="hljs-attr">"waste_metrics"</span>: <span class="hljs-string">"FP"</span>
+   }
+ ]
+}
+</code></pre>
+<h2 id="-weight">/weight</h2>
+</blockquote>
+<h4 id="post-">POST:</h4>
+<blockquote>
+<p><strong>Body Example:</strong></p>
+<pre><code class="lang-json">{
+ <span class="hljs-attr">"data"</span>: [
+   {
+     <span class="hljs-attr">"datetime"</span>: <span class="hljs-string">"2020-11-04 15:06:25"</span>,
+     <span class="hljs-attr">"weight"</span>: <span class="hljs-number">25</span>,
+     <span class="hljs-attr">"bin_id"</span>: <span class="hljs-number">1</span>
+   }
+ ]
+}
+</code></pre>
+<p><strong>Request Example (Python):</strong></p>
+<pre><code class="lang-python">import requests
+postRequest = {<span class="hljs-string">"data"</span>:[{<span class="hljs-string">"datetime"</span>: <span class="hljs-string">"2020-11-04 15:06:25"</span>,<span class="hljs-string">"weight"</span>: <span class="hljs-number">25</span>,<span class="hljs-string">"bin_id"</span>: <span class="hljs-number">1</span>}]}
+r = requests.post(BASEURL+<span class="hljs-string">"/post/weight"</span>,data=json.dumps(postRequest),headers={<span class="hljs-string">"Content-Type"</span>: <span class="hljs-string">"application/json"</span>,<span class="hljs-string">"Accept"</span>: <span class="hljs-string">"application/json"</span>})
+<span class="hljs-function"><span class="hljs-title">print</span><span class="hljs-params">(r.json)</span></span>
+<span class="hljs-function"><span class="hljs-title">assert</span><span class="hljs-params">(r.status_code == <span class="hljs-number">201</span>)</span></span>
+</code></pre>
+</blockquote>
+<h4 id="get-">GET:</h4>
+<blockquote>
+<p><strong>Body Example:</strong></p>
+<pre><code class="lang-json">{<span class="hljs-attr">"bin_id"</span>:<span class="hljs-number">1</span>,<span class="hljs-attr">"start_timestamp"</span>:<span class="hljs-string">"2014-11-04 15:06:25"</span>,<span class="hljs-attr">"end_timestamp"</span>:<span class="hljs-string">"2021-01-29 15:06:25"</span>}
+</code></pre>
+<p><strong>Request Example (Python):</strong></p>
+<pre><code class="lang-python"><span class="hljs-keyword">import</span> requests
+params = {<span class="hljs-string">"bin_id"</span>:1,<span class="hljs-string">"start_timestamp"</span>:<span class="hljs-string">"2014-11-04 15:06:25"</span>,<span class="hljs-string">"end_timestamp"</span>:<span class="hljs-string">"2021-01-29 15:06:25"</span>}
+r = requests.<span class="hljs-keyword">get</span>(<span class="hljs-string">"http://127.0.0.1/weight"</span>,params=params,headers={<span class="hljs-string">"Content-Type"</span>: &gt;<span class="hljs-string">"application/json"</span>,<span class="hljs-string">"Accept"</span>: <span class="hljs-string">"application/json"</span>})
+print(r.json)
+<span class="hljs-keyword">assert</span>(r.status_code==200)
+</code></pre>
+<p><strong>Request Example (curl):</strong></p>
+<pre><code class="lang-bash">curl 'http://<span class="hljs-number">127.0.0.1</span>/weight?bin_id=<span class="hljs-number">1</span>&amp;start_timestamp=<span class="hljs-number">2014-11-04</span>%<span class="hljs-number">2015:06:25</span>&amp;end_timestamp=<span class="hljs-number">2016-11-04</span>%<span class="hljs-number">2015:06:25</span>'
+</code></pre>
+<p><strong>Response Example</strong>:</p>
+<pre><code class="lang-json">{
+ <span class="hljs-attr">"data"</span>: [
+   {
+     <span class="hljs-attr">"bin_id"</span>: <span class="hljs-number">1</span>,
+     <span class="hljs-attr">"bin_weight"</span>: <span class="hljs-number">25.0</span>,
+    <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2015-11-04 15:06:25"</span>
+   }
+ ]
+}
+</code></pre>
+</blockquote>
+<h2 id="-weight-today">/weight-today</h2>
+<h4 id="get-">GET:</h4>
+<blockquote>
+<p><strong>Request Example (Python)</strong>:</p>
+<pre><code class="lang-python">import requests
+r = requests.get(url=<span class="hljs-string">"http://127.0.0.1/weight-today"</span>)
+<span class="hljs-function"><span class="hljs-title">print</span><span class="hljs-params">(r.json)</span></span>
+<span class="hljs-function"><span class="hljs-title">assert</span><span class="hljs-params">(r.status_code == <span class="hljs-number">200</span>)</span></span>
+</code></pre>
+<p><strong>Request Example (curl)</strong>:</p>
+<pre><code class="lang-bash"><span class="hljs-attribute">curl</span> http:<span class="hljs-number">127.0.0.1</span>/weight-today
+</code></pre>
+<p><strong>Response Example</strong>:</p>
+<pre><code class="lang-json">{
+ <span class="hljs-attr">"data"</span>: [
+   {
+     <span class="hljs-attr">"bin_id"</span>: <span class="hljs-number">1</span>,
+     <span class="hljs-attr">"bin_weight"</span>: <span class="hljs-number">25.0</span>,
+     <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2015-11-04 15:06:25"</span>
+   }
+ ]
+}
+</code></pre>
+</blockquote>
+<h2 id="-fullness">/fullness</h2>
+<h4 id="post-">POST:</h4>
+<p>Posts entry into bin fullness table given a datetime, fullness int, and bin id.</p>
+<blockquote>
+<p><strong>Body Example:</strong></p>
+<pre><code class="lang-json">{
+ <span class="hljs-attr">"data"</span>: [
+   {
+     <span class="hljs-attr">"datetime"</span>: <span class="hljs-string">"2015-11-04 15:06:25"</span>,
+     <span class="hljs-attr">"fullness"</span>: <span class="hljs-number">50</span>,
+     <span class="hljs-attr">"bin_id"</span>: <span class="hljs-number">1</span>
+   }
+ ]
+}
+</code></pre>
+<p><strong>Request Example (Python):</strong></p>
+<pre><code class="lang-python">import requests
+postRequest = {<span class="hljs-string">"data"</span>:[{<span class="hljs-string">"datetime"</span>:<span class="hljs-string">"2015-11-04 15:06:25"</span>,<span class="hljs-string">"fullness"</span>:<span class="hljs-number">50</span>,<span class="hljs-string">"bin_id"</span>:<span class="hljs-number">1</span>}]}
+r = requests.post(<span class="hljs-string">"http://127.0.0.1/fullness"</span>, data=json.dumps(postRequest),headers={<span class="hljs-string">"Content-Type"</span>: <span class="hljs-string">"application/json"</span>,<span class="hljs-string">"Accept"</span>: <span class="hljs-string">"application/json"</span>})
+<span class="hljs-function"><span class="hljs-title">print</span><span class="hljs-params">(r.content)</span></span>
+<span class="hljs-function"><span class="hljs-title">assert</span><span class="hljs-params">(r.status_code == <span class="hljs-number">201</span>)</span></span>
+</code></pre>
+</blockquote>
+<h4 id="get-">GET:</h4>
+<p>Gets bin fullness and id corresponding to it given a specific id, start timestamp, and end timestamp in the request parameters.</p>
+<p>All parameters must be provided, otherwise a 400 error is thrown.</p>
+<p>If start timestamp is greater than the end timestamp provided, a 400 error is thrown.</p>
+<blockquote>
+<p><strong>Body Example:</strong></p>
+<pre><code class="lang-json">{
+   <span class="hljs-attr">"start_timestamp"</span>: <span class="hljs-string">"2014-11-04 15:06:25"</span>,
+   <span class="hljs-attr">"end_timestamp"</span>: <span class="hljs-string">"2021-01-29 15:06:25"</span>,
+   <span class="hljs-attr">"bin_id"</span>: <span class="hljs-number">1</span>
+}
+</code></pre>
+<p><strong>Request Example (Python):</strong></p>
+<pre><code class="lang-python"><span class="hljs-keyword">import</span> requests
+params = {<span class="hljs-string">"start_timestamp"</span>:<span class="hljs-string">"2019-11-04 15:06:25"</span>,<span class="hljs-string">"end_timestamp"</span>:<span class="hljs-string">"2021-01-29 15:06:25"</span>,<span class="hljs-string">"bin_id"</span>:1}
+r = requests.<span class="hljs-keyword">get</span>(BASEURL+<span class="hljs-string">"/fullness"</span>, params=params,headers={<span class="hljs-string">"Content-Type"</span>: <span class="hljs-string">"application/json"</span>,<span class="hljs-string">"Accept"</span>: <span class="hljs-string">"application/json"</span>})
+print(r.json)
+<span class="hljs-keyword">assert</span>(r.status_code == 200)
+</code></pre>
+<p><strong>Request Example (curl):</strong></p>
+<pre><code class="lang-bash">curl 'http://<span class="hljs-number">127.0.0.1</span>/fullness?start_timestamp=<span class="hljs-number">2019-11-04</span>%<span class="hljs-number">2015:06:25</span>&amp;end_timestamp=<span class="hljs-number">2021-01-29</span>%<span class="hljs-number">2015:06:25</span>&amp;bin_id=<span class="hljs-number">1</span>'
+</code></pre>
+<p><strong>Response Example</strong></p>
+<pre><code class="lang-json">{
+ <span class="hljs-attr">"data"</span>: [
+   {
+     <span class="hljs-attr">"bin_id"</span>: <span class="hljs-number">1</span>,
+     <span class="hljs-attr">"bin_fullness"</span>: <span class="hljs-number">25.0</span>,
+     <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2015-11-04 15:06:25"</span>
+   }
+ ]
+}
+</code></pre>
+<h2 id="fullness-today">fullness-today</h2>
+</blockquote>
+<h4 id="get-">GET:</h4>
+<blockquote>
+<p><strong>Request Example (Python)</strong></p>
+<pre><code class="lang-python">import requests
+r = requests.get(url=<span class="hljs-string">"http://127.0.0.1/fullness-today"</span>)
+<span class="hljs-function"><span class="hljs-title">print</span><span class="hljs-params">(r.json)</span></span>
+<span class="hljs-function"><span class="hljs-title">assert</span><span class="hljs-params">(r.status_code == <span class="hljs-number">200</span>)</span></span>
+</code></pre>
+<p><strong>Response Example</strong></p>
+<pre><code class="lang-json">{
+ <span class="hljs-attr">"data"</span>: [
+   {
+     <span class="hljs-attr">"bin_id"</span>: <span class="hljs-number">1</span>,
+    <span class="hljs-attr">"bin_fullness"</span>: <span class="hljs-number">25.0</span>,
+     <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2015-11-04 15:06:25"</span>
+   }
+ ]
+}
+</code></pre>
+</blockquote>
+<h2 id="-usage">/usage</h2>
+<h4 id="post-">POST:</h4>
+<blockquote>
+<p><strong>Body Example:</strong></p>
+<pre><code class="lang-json">{
+   <span class="hljs-attr">"data"</span>: [
+       {
+           <span class="hljs-attr">"bin_id"</span>: <span class="hljs-number">1</span>,
+           <span class="hljs-attr">"datetime"</span>: <span class="hljs-string">"2020-11-04 15:06:25"</span>
+       }
+   ]
+}
+</code></pre>
+<p><strong>Request Example (Python):</strong></p>
+<pre><code class="lang-python"><span class="hljs-keyword">import</span> requests
+<span class="hljs-title">postRequest</span> = {<span class="hljs-string">"data"</span>:[{<span class="hljs-string">"bin_id"</span>:<span class="hljs-number">1</span>,<span class="hljs-string">"datetime"</span>:<span class="hljs-string">"2020-11-04 15:06:25"</span>}]}
+<span class="hljs-title">r</span> = requests.post(<span class="hljs-type">BASEURL</span> + <span class="hljs-string">"/usage"</span>, <span class="hljs-class"><span class="hljs-keyword">data</span>=json.dumps(<span class="hljs-title">postRequest</span>),headers={"<span class="hljs-type">Content</span>-<span class="hljs-type">Type</span>": "<span class="hljs-title">application</span>/<span class="hljs-title">json</span>","<span class="hljs-type">Accept</span>": "<span class="hljs-title">application</span>/<span class="hljs-title">json</span>"})</span>
+<span class="hljs-title">assert</span>(r.status_code == <span class="hljs-number">201</span>)
+</code></pre>
+</blockquote>
+<h4 id="get-">GET:</h4>
+<blockquote>
+<p><strong>Body Example:</strong></p>
+<pre><code class="lang-json">{
+  <span class="hljs-attr">"start_timestamp"</span>: <span class="hljs-string">"2014-11-04 15:06:25"</span>,
+  <span class="hljs-attr">"end_timestamp"</span>: <span class="hljs-string">"2021-01-29 15:06:25"</span>,
+   <span class="hljs-attr">"bin_id"</span>: <span class="hljs-number">1</span>
+}
+</code></pre>
+<p><strong>Request Example (Python):</strong></p>
+<pre><code class="lang-python"><span class="hljs-keyword">import</span> requests
+params = {<span class="hljs-string">"start_timestamp"</span>:<span class="hljs-string">"2019-11-04 15:06:25"</span>,<span class="hljs-string">"end_timestamp"</span>:<span class="hljs-string">"2021-01-29 15:06:25"</span>,<span class="hljs-string">"bin_id"</span>:1}
+r = requests.<span class="hljs-keyword">get</span>(<span class="hljs-string">"http://127.0.0.1/usage"</span>, params=params, headers={<span class="hljs-string">"Content-Type"</span>: &gt;<span class="hljs-string">"application/json"</span>,<span class="hljs-string">"Accept"</span>: <span class="hljs-string">"application/json"</span>})
+print(r.json)
+<span class="hljs-keyword">assert</span>(r.status_code == 200)
+</code></pre>
+<p><strong>Request Example (curl):</strong></p>
+<pre><code class="lang-bash">curl 'http://<span class="hljs-number">127.0.0.1</span>/usage?bin_id=<span class="hljs-number">1</span>&amp;start_timestamp=<span class="hljs-number">2014-11-04</span>%<span class="hljs-number">2015:06:25</span>&amp;end_timestamp=<span class="hljs-number">2016-11-04</span>%<span class="hljs-number">2015:06:25</span>'
+</code></pre>
+<p><strong>Response Example</strong></p>
+<pre><code class="lang-json">{
+ <span class="hljs-attr">"data"</span>: [
+   {
+     <span class="hljs-attr">"bin_id"</span>: <span class="hljs-number">1</span>,
+     <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2015-11-04 15:06:25"</span>
+   }
+ ]
+}
+</code></pre>
+<h2 id="-usage-today">/usage-today</h2>
+</blockquote>
+<h4 id="get-">GET:</h4>
+<blockquote>
+<p><strong>Request Example (Python):</strong></p>
+<pre><code class="lang-python">import requests
+r = requests.get(url=<span class="hljs-string">"http://127.0.0.1/usage-today"</span>)
+<span class="hljs-function"><span class="hljs-title">print</span><span class="hljs-params">(r.json)</span></span>
+<span class="hljs-function"><span class="hljs-title">assert</span><span class="hljs-params">(r.status_code == <span class="hljs-number">200</span>)</span></span>
+</code></pre>
+<p><strong>Request Example (curl):</strong></p>
+<pre><code class="lang-bash"><span class="hljs-attribute">curl</span> <span class="hljs-string">'http://127.0.0.1/usage-today'</span>
+</code></pre>
+<p><strong>Response Example</strong></p>
+<pre><code class="lang-json">{
+ <span class="hljs-attr">"data"</span>: [
+   {
+     <span class="hljs-attr">"bin_id"</span>: <span class="hljs-number">1</span>,
+     <span class="hljs-attr">"timestamp"</span>: <span class="hljs-string">"2015-11-04 15:06:25"</span>
+   }
+ ]
+}
+</code></pre>
+</blockquote>
+<h2 id="-metric-csv">/metric-csv</h2>
+<h4 id="get-">GET:</h4>
+<blockquote>
+<p>**Request Example (curl)</p>
+<pre><code class="lang-bash">curl 'http://<span class="hljs-number">127.0.0.1</span>/metric-csv?metric=fullness&amp;start_timestamp=<span class="hljs-number">2015-11-04</span>%<span class="hljs-number">2015:06:25</span>&amp;end_timestamp=<span class="hljs-number">2021-04-1</span>%<span class="hljs-number">2015:06:25</span>'
+</code></pre>
+</blockquote>
