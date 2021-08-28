@@ -26,7 +26,7 @@ load_dotenv(dotenv_path=dotenv_path)
 
 # global variables
 BASEURL = os.getenv("BASE_URL")  # replace with your own base URL
-IPADDRESS = '192.168.1.100:5001' #"127.0.0.1"  # replace with your own IP Address you are testing with
+IPADDRESS = "127.0.0.1"  # replace with your own IP Address you are testing with
 HEADERS = {"Content-Type": "application/json", "Accept": "application/json"}
 
 def test_drop_and_create_tables():
@@ -161,11 +161,11 @@ def test_get_weight_w_id():
     assert r.status_code == 200
 
 
-# def test_post_image():
-#     with open("404.jpg", "rb") as f:
-#         r = requests.post(BASEURL + "/image?key={}".format(API_KEY), files={"file": f})
-#         print(r.content)
-#         assert r.status_code == 200
+def test_post_image():
+    with open("404.jpg", "rb") as f:
+        r = requests.post(BASEURL + "/image?key={}".format(API_KEY), files={"file": f})
+        print(r.content)
+        assert r.status_code == 200
 
 
 if __name__ == "__main__":
