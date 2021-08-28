@@ -17,6 +17,8 @@ from dotenv import load_dotenv
 # local imports
 import create_tables
 
+from config import API_KEY
+
 # load environment variables
 dirname = os.path.dirname(__file__)
 dotenv_path = Path(os.path.join(dirname, ".env"))
@@ -24,19 +26,16 @@ load_dotenv(dotenv_path=dotenv_path)
 
 # global variables
 BASEURL = os.getenv("BASE_URL")  # replace with your own base URL
-IPADDRESS = "127.0.0.1"  # replace with your own IP Address you are testing with
+IPADDRESS = '192.168.1.100:5001' #"127.0.0.1"  # replace with your own IP Address you are testing with
 HEADERS = {"Content-Type": "application/json", "Accept": "application/json"}
-
 
 def test_drop_and_create_tables():
     # WARNING: this will delete the existing data in the database by dropping all the tables
     create_tables.recreate_tables()
 
-
 def test_main_page():
     r = requests.get(url=BASEURL)
     assert r.status_code == 200
-
 
 def test_post_bin_info():
     postRequest = {
@@ -51,7 +50,7 @@ def test_post_bin_info():
         ]
     }
     r = requests.post(
-        BASEURL + "/bin-info", data=json.dumps(postRequest), headers=HEADERS
+        BASEURL + "/bin-info?key={}".format(API_KEY), data=json.dumps(postRequest), headers=HEADERS
     )
     print(r.content)
     assert r.status_code == 201
@@ -62,14 +61,14 @@ def test_get_bin_info_all():
     **Equivalent Request**
     `http://BASEURL:YOURPORT/bin-info/all`
     """
-    r = requests.get(url=BASEURL + "/bin-info-all")
+    r = requests.get(url=BASEURL + "/bin-info-all?key={}".format(API_KEY))
     print(r.json())
     assert r.status_code == 200
 
 
 def test_post_bin_usage():
     postRequest = {"data": [{"bin_id": 1, "datetime": "2020-11-04 15:06:25"}]}
-    r = requests.post(BASEURL + "/usage", data=json.dumps(postRequest), headers=HEADERS)
+    r = requests.post(BASEURL + "/usage?key={}".format(API_KEY), data=json.dumps(postRequest), headers=HEADERS)
     assert r.status_code == 201
 
 
@@ -79,13 +78,13 @@ def test_get_bin_usage():
         "end_timestamp": "2021-01-29 15:06:25",
         "bin_id": 1,
     }
-    r = requests.get(url=BASEURL + "/usage", params=params, headers=HEADERS)
+    r = requests.get(url=BASEURL + "/usage?key={}".format(API_KEY), params=params, headers=HEADERS)
     print(r.json())
     assert r.status_code == 200
 
 
 def test_get_usage_all():
-    r = requests.get(url=BASEURL + "/usage-today")
+    r = requests.get(url=BASEURL + "/usage-today?key={}".format(API_KEY))
     print(r.json())
     assert r.status_code == 200
 
@@ -95,7 +94,7 @@ def test_post_fullness():
         "data": [{"datetime": "2015-11-04 15:06:25", "fullness": 50, "bin_id": 1}]
     }
     r = requests.post(
-        BASEURL + "/fullness", data=json.dumps(postRequest), headers=HEADERS
+        BASEURL + "/fullness?key={}".format(API_KEY), data=json.dumps(postRequest), headers=HEADERS
     )
     print(r.content)
     assert r.status_code == 201
@@ -106,7 +105,7 @@ def test_get_fullness_all():
     **Equivalent Request**
     `http://BASEURL:YOURPORT/bin-fullness/all`
     """
-    r = requests.get(url=BASEURL + "/fullness-today")
+    r = requests.get(url=BASEURL + "/fullness-today?key={}".format(API_KEY))
     print(r.json())
     assert r.status_code == 200
 
@@ -121,7 +120,7 @@ def test_get_fullness_w_id():
         "end_timestamp": "2021-01-29 15:06:25",
         "bin_id": 1,
     }
-    r = requests.get(BASEURL + "/fullness", params=params, headers=HEADERS)
+    r = requests.get(BASEURL + "/fullness?key={}".format(API_KEY), params=params, headers=HEADERS)
     print(r.json())
     assert r.status_code == 200
 
@@ -131,7 +130,7 @@ def test_post_weight():
         "data": [{"datetime": "2015-11-04 15:06:25", "weight": 25, "bin_id": 1}]
     }
     r = requests.post(
-        BASEURL + "/weight", data=json.dumps(postRequest), headers=HEADERS
+        BASEURL + "/weight?key={}".format(API_KEY), data=json.dumps(postRequest), headers=HEADERS
     )
     print(r.content)
     assert r.status_code == 201
@@ -142,7 +141,7 @@ def test_get_weight_all():
     **Equivalent Request**
     `http://BASEURL:YOURPORT/weight/all`
     """
-    r = requests.get(url=BASEURL + "/weight-today")
+    r = requests.get(url=BASEURL + "/weight-today?key={}".format(API_KEY))
     print(r.json())
     assert r.status_code == 200
 
@@ -157,16 +156,16 @@ def test_get_weight_w_id():
         "start_timestamp": "2014-11-04 15:06:25",
         "end_timestamp": "2021-01-29 15:06:25",
     }
-    r = requests.get(BASEURL + "/weight", params=params, headers=HEADERS)
+    r = requests.get(BASEURL + "/weight?key={}".format(API_KEY), params=params, headers=HEADERS)
     print(r.json())
     assert r.status_code == 200
 
 
-def test_post_image():
-    with open("404.jpg", "rb") as f:
-        r = requests.post(BASEURL + "/image", files={"file": f})
-        print(r.content)
-        assert r.status_code == 200
+# def test_post_image():
+#     with open("404.jpg", "rb") as f:
+#         r = requests.post(BASEURL + "/image?key={}".format(API_KEY), files={"file": f})
+#         print(r.content)
+#         assert r.status_code == 200
 
 
 if __name__ == "__main__":

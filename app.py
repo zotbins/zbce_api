@@ -25,7 +25,7 @@ import pandas
 
 # local custom imports
 from error import Error
-from config import db, app, UPLOAD_FOLDER, ALLOWED_EXTENSIONS
+from config import db, app, UPLOAD_FOLDER, ALLOWED_EXTENSIONS, API_KEY
 import models
 import zbce_queries
 
@@ -33,15 +33,26 @@ import zbce_queries
 # TODO: set the hardlimit somewhere else
 limit_request = 1000
 
+def check_api_key(api_key):
+    """
+    This is a decorator function to check the API key
+    """
+    api_key = request.args.get("key")
+    return api_key == API_KEY
 
 @app.route("/")
 def main_page():
-    return "<h1>ZotBins Community Edition</h1>"
+    return render_template('pages/api_guide.html')
 
-
+#TODO: test this out
 @app.route("/bin-info", methods=["POST", "GET"])
+# @check_api_key
 def bin_info():
     try:
+        # here's a dumb way to add a passkey to the api
+        api_key = request.args.get("key")  # make sure you have the bin id
+        if api_key != API_KEY: return (jsonify({"message": "Invalid API key"}),404)
+
         if request.method == "POST":
             # Check if JSON request
             if not request.json:
@@ -129,6 +140,10 @@ def bin_info():
 @app.route("/bin-info-all", methods=["GET"])
 def get_bin_info_all():
     try:
+        # here's a dumb way to add a passkey to the api
+        api_key = request.args.get("key")  # make sure you have the bin id
+        if api_key != API_KEY: return (jsonify({"message": "Invalid API key"}),404)
+
         if request.method == "GET":
             bins = models.BinInfo.query.all()
             ret = {"data": []}
@@ -158,6 +173,10 @@ def get_bin_info_all():
 @app.route("/usage", methods=["POST", "GET"])
 def usage():
     try:
+        # here's a dumb way to add a passkey to the api
+        api_key = request.args.get("key")  # make sure you have the bin id
+        if api_key != API_KEY: return (jsonify({"message": "Invalid API key"}),404)
+
         if request.method == "POST":
             # Check if JSON request
             if not request.json:
@@ -221,6 +240,10 @@ def usage():
 @app.route("/usage-today", methods=["GET"])
 def get_usage_today():
     try:
+        # here's a dumb way to add a passkey to the api
+        api_key = request.args.get("key")  # make sure you have the bin id
+        if api_key != API_KEY: return (jsonify({"message": "Invalid API key"}),404)
+
         usage_data = models.BinUsage.query.filter(
             models.BinUsage.datetimestamp > datetime.datetime.now().strftime("%Y-%m-%d")
         ).all()
@@ -237,6 +260,10 @@ def get_usage_today():
 @app.route("/weight", methods=["POST", "GET"])
 def weight():
     try:
+        # here's a dumb way to add a passkey to the api
+        api_key = request.args.get("key")  # make sure you have the bin id
+        if api_key != API_KEY: return (jsonify({"message": "Invalid API key"}),404)
+
         if request.method == "POST":
             # Check if JSON request
             if not request.json:
@@ -313,6 +340,10 @@ def weight():
 @app.route("/weight-today", methods=["GET"])
 def get_weight_today():
     try:
+        # here's a dumb way to add a passkey to the api
+        api_key = request.args.get("key")  # make sure you have the bin id
+        if api_key != API_KEY: return (jsonify({"message": "Invalid API key"}),404)
+
         weight_data = models.BinWeight.query.filter(
             models.BinWeight.datetimestamp
             > datetime.datetime.now().strftime("%Y-%m-%d")
@@ -331,6 +362,10 @@ def get_weight_today():
 @app.route("/fullness", methods=["GET", "POST"])
 def fullness_info():
     try:
+        # here's a dumb way to add a passkey to the api
+        api_key = request.args.get("key")  # make sure you have the bin id
+        if api_key != API_KEY: return (jsonify({"message": "Invalid API key"}),404)
+
         if request.method == "GET":
             bin_id = request.args.get("bin_id")
             start_timestamp = request.args.get("start_timestamp")
@@ -413,6 +448,10 @@ def fullness_info():
 @app.route("/fullness-today", methods=["GET"])
 def get_fullness():
     try:
+        # here's a dumb way to add a passkey to the api
+        api_key = request.args.get("key")  # make sure you have the bin id
+        if api_key != API_KEY: return (jsonify({"message": "Invalid API key"}),404)
+
         if request.method == "GET":
             fullness_data = models.BinFullness.query.filter(
                 models.BinFullness.datetimestamp
@@ -438,6 +477,10 @@ def post_image():
     """
     Post Request Example:
     """
+    # here's a dumb way to add a passkey to the api
+    api_key = request.args.get("key")  # make sure you have the bin id
+    if api_key != API_KEY: return (jsonify({"message": "Invalid API key"}),404)
+
     if request.method == "POST":
         if "file" not in request.files:
             flash("no file part in request")
@@ -482,6 +525,10 @@ def uploaded_file(filename):
     """
     This function is for viewing the uploaded files we have
     """
+    # here's a dumb way to add a passkey to the api
+    api_key = request.args.get("key")  # make sure you have the bin id
+    if api_key != API_KEY: return (jsonify({"message": "Invalid API key"}),404)
+
     return send_from_directory(app.config["UPLOAD_FOLDER"], filename)
 
 
@@ -494,6 +541,10 @@ def get_metrics_as_csv():
     > `end_timestamp`
     """
     try:
+        # here's a dumb way to add a passkey to the api
+        api_key = request.args.get("key")  # make sure you have the bin id
+        if api_key != API_KEY: return (jsonify({"message": "Invalid API key"}),404)
+
         # get request parameters
         metric = request.args.get("metric")
         start_timestamp = request.args.get("start_timestamp")
@@ -586,7 +637,6 @@ def paramMissing(required_params: tuple, row: iter) -> bool:
         if p not in row:
             return True
     return False
-
 
 # adding to database function
 def addToDatabase(data):
